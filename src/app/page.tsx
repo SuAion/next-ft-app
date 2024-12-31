@@ -1,4 +1,14 @@
+import { Metadata } from "next";
 import Image from "next/image";
+
+// 顶级meta 页面meta与此合并
+export const metadata: Metadata = {
+  title: 'Fotor Visual Creative Community',
+  description:
+    'Explore more AI artworks and boost engagement through AI image creation on Fotor visual creative community.',
+};
+
+
 
 export default function Home() {
   return (
@@ -63,7 +73,7 @@ export default function Home() {
             width={16}
             height={16}
           />
-          Learn
+          Learn  探索
         </a>
         <a
           className="flex items-center gap-2 hover:underline hover:underline-offset-4"

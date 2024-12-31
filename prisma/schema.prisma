@@ -1,0 +1,22 @@
+// Prisma Client 生成器配置
+// 这告诉 Prisma 使用 JavaScript/TypeScript 客户端
+generator client {
+  provider = "prisma-client-js"
+}
+
+// 数据库连接配置
+// 指定使用 MongoDB 作为数据库，并从环境变量中读取连接 URL
+datasource db {
+  provider = "mongodb"  // 使用 MongoDB 作为数据库提供者
+  url      = env("DATABASE_URL")  // 从 .env 文件读取数据库连接字符串
+}
+
+// 用户模型定义
+model User {
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId  // MongoDB 的唯一标识符
+  email     String   @unique  // 邮箱字段，设置为唯一
+  name      String?  // 可选的名字字段，问号表示该字段可以为空
+  password  String   // 密码字段
+  createdAt DateTime @default(now())  // 创建时间，默认为当前时间
+  updatedAt DateTime @updatedAt  // 更新时间，自动更新
+}
