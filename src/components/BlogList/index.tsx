@@ -6,7 +6,7 @@ interface Blog {
   category: string
   date: string
 }
-export default async function List() {
+export default async function BlogList() {
   let blogs: Blog[] = [];
 
   try {
@@ -24,9 +24,6 @@ export default async function List() {
         {blogs.map((blog) => (
           <div key={blog.id} className="border p-4 rounded-lg shadow">
             <h3 className="text-lg font-semibold">{blog.title}</h3>
-            <p className="text-gray-600 text-sm">作者: {blog.author}</p>
-            <p className="text-gray-500 text-sm">分类: {blog.category}</p>
-            <p className="text-gray-500 text-sm">发布日期: {blog.date}</p>
           </div>
         ))}
       </div>

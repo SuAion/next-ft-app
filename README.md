@@ -1,8 +1,5 @@
+## SSG与SSR NextJS 14 默认SSG。
 
-
-
-
-##  一、 SSG与SSR  NextJS 14 默认SSG。
 ```
 当你 npm run build 后，再 npm run start，无论你刷新多少次浏览器，内容都是不变的，即使有 fetch 也不行, 显示的时间仍旧是不变的
 ```
@@ -40,17 +37,15 @@ export async function getStaticProps() {
 ## SSR：动态渲染，在服务端接收到每个用户请求时，重新请求数据，重新渲染页面
 
     收益：显示实时数据、特定用户的特定数据（用于区别对待）、可以获取到客户端请求的cookie和URL参数
-  1. 当你需要给SSG固定一个缓存生效时间，可以在页面文件顶部增加一行
 
+1. 当你需要给SSG固定一个缓存生效时间，可以在页面文件顶部增加一行
 
 ```js
-
 export const dynamic = 'force-dynamic';
-
 ```
 
+## 一、React cache 函数也可以用于记忆数据请求
 
-##  一、React cache 函数也可以用于记忆数据请求
 ```
 
 cache(fn) 将fn的执行结果缓存起来，再次调用时，可以从缓存中获取结果
@@ -62,9 +57,10 @@ UserA- FN(A)  缓存键：A
 UserB- FN(B)  缓存键：B
 ```
 
-## generateStaticParams
+## generateStaticParams 生成静态页面
 
 假设你有一个动态路由的页面 /products/[id]，你希望为每个产品生成一个静态页面。你可以使用 generateStaticParams 来实现。
+
 ```
 // pages/products/[id].tsx
 
@@ -101,12 +97,10 @@ export default ProductPage;
 
 ```
 
-
-
-
 ## 服务端组件和客户端组件的包含关系
 
 服务器组件可以包含客户端组件，适合在服务器端获取数据并传递给客户端进行交互
+
 ```
   // 服务器组件
   export default function ServerComponent() {
@@ -121,9 +115,8 @@ export default ProductPage;
   }
 ```
 
-
-
 ## 客户端组件请求 跨域的限制
+
 ```
 "use client"
 import { useState, useEffect } from "react";
@@ -163,3 +156,19 @@ export default  function ClientSideCp() {
 }
 
 ```
+
+## Zustand水合问题
+
+默认情况下 服务端组件只能拿到当时在store数据，渲染过程不会受到来自其他德store数据更新触发改变
+
+在解决水合问题时，服务端组件获取或更改的 Zustand 状态，需要通过 props 传递到客户端，然后在客户端去更新 Zustand 的值。这是因为：
+
+React 的水合过程：
+
+服务端生成的 HTML 只是静态的内容。
+在客户端水合过程中，React 会尝试与服务端生成的 HTML 对齐，初始化状态通常不会同步。
+Zustand 的单例问题：
+
+Zustand 在客户端运行时保持的是一个全局状态。
+服务端更改的状态不会自动同步到客户端，客户端会以自己的 Zustand 初始化值为主。
+通过 props 将服务端的 Zustand 状态传递到客户端，然后在客户端用这些 props 初始化客户端的 Zustand 状态，可以确保状态的一致性，并解决水合问题。

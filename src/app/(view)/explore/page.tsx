@@ -1,4 +1,9 @@
+import BlogSkeleton from "@/components/BlogSkeleton";
 import ClientSideCp from "@/components/ClientSideCp";
+import CountList from "@/components/CountList";
+import ServerSideCp from "@/components/ServerSideCp";
+import { Suspense } from "react";
+
 
 export const dynamic = 'force-dynamic';
 type SearchParams = {
@@ -38,12 +43,14 @@ export async function generateMetadata({ searchParams }: { searchParams: SearchP
   }
 }
 
-export default  function Home({ searchParams }: { searchParams: SearchParams }) {
-  console.log('home_searchParams', searchParams);
+export default async function Home() {
+  const response = await fetch('https://api.vercel.app/blog');
+  const blogs = await response.json();
 
   return (
-    <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
-      <ClientSideCp/>
+    <div>
+      <ClientSideCp initialPosts={blogs} />
+      <ServerSideCp />
     </div>
   );
 }

@@ -1,37 +1,28 @@
-"use client"
-import { useState, useEffect } from "react";
-export default function ClientSideCp() {
-  const [number, setNumber] = useState(0)
-  const [data, setData] = useState(null);
+// ClientSideCp.tsx
+"use client";
 
+import { useEffect } from "react";
+import { baseStore } from "@/store/baseStore";
 
-  // 网络请求  浏览器发出请求 同源政策
+export default function ClientSideCp({ initialPosts }) {
+  const count = baseStore(state => state.count)
+  const posts = baseStore((state) => state.posts);
+  const setPosts = baseStore((state) => state.setPosts);
+
   useEffect(() => {
-    fetch('https://api.vercel.app/blog')
-      .then(response => response.json())
-      .then(data => setData(data))
-      .catch(error => console.error('Error fetching data:', error));
-  }, []);
-
-
-  // 本地请求自己得api   服务器发出请求 没有同源政策。 等同于代理
-  useEffect(() => {
-    fetch('api/blogs')
-      .then(response => response.json())
-      .then(data => setData(data))
-      .catch(error => console.error('Error fetching data:', error));
-  }, []);
-
-
+    if (posts.length === 0) {
+      setPosts(initialPosts); // 初始化 Zustand 状态
+    }
+  }, [initialPosts, posts, setPosts]);
 
   return (
-    <>
-      <ul>
-        <button onClick={() => setNumber(number + 1)}>增加 </button>
-        <li>{number}</li>
-        <button onClick={() => setNumber(number - 1)}>减少</button>
-        {data && data.map(item => <li key={item.id}>{item.title}</li>)}
-      </ul></>
+    <div>
+      <p>{count}</p>
+      {posts.length > 0 ? (
+        posts.map((post) => <div key={post.id}>{post.title}</div>)
+      ) : (
+        <p>没有数据</p>
+      )}
+    </div>
   );
-
 }
