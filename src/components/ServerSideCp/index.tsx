@@ -4,11 +4,9 @@ interface Post {
   title: string
 }
 import { baseStore } from "@/store/baseStore";
-import { useGlobalStore } from "@/store/globalStore";
 
 export default async function ServerSideCp() {
   const { setPosts, posts: standPost, count, setCount } = baseStore.getState(); // 直接获取 setPosts 方法
-  console.log('服务到拿到的', count)
 
 
   try {
@@ -18,8 +16,13 @@ export default async function ServerSideCp() {
     }
     const blogs = await response.json();
     setPosts(blogs)
-    // 运行态的时候 设置 count 为20  但是不会同步到zustand
-    // Zustand 的状态管理是基于客户端的，因此在服务端组件中调用状态更新方法不会影响客户端的状态。
+    //
+
+
+    /**
+    * @运行态的时候设置count为20但是不会同步到zustand
+    * @状态管理是基于客户端的一一一因此在服务端组件中调用状态更新方法不会影响客户端的状态
+    */
     setCount(20)
 
     return (

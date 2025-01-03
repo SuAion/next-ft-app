@@ -6,10 +6,10 @@ import path from 'path';
 export async function GET(request: NextRequest) {
     // 这里可以处理查询参数 ?xxxx=xxxx
     const { searchParams } = new URL(request.url);
-    console.log(request.nextUrl)
+    // console.log(request.nextUrl)
     const name = searchParams.get('name') || 'World';
 
-    return NextResponse.json({ message: `Hello, ${name }!` });
+    return NextResponse.json({ message: `Hello, ${name}!` });
 }
 
 // 处理 POST 请求

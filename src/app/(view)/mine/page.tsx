@@ -3,6 +3,7 @@ import { Suspense } from "react"
 import BlogSkeleton from "@/components/BlogSkeleton"
 import BlogList from '@/components/BlogList'
 import ClientSideCp from "@/components/ClientSideCp"
+import I18nWrapper from "@/HOC/I18nWrapper"
 
 
 
@@ -18,7 +19,9 @@ export default function Mine() {
 
       <div className="p-4 mt-4 border-t">
         <h2 className="text-xl font-bold mb-4">客户端内容</h2>
-        <ClientSideCp/>
+        <I18nWrapper>
+          <ClientSideCp initialPosts={[]} />
+        </I18nWrapper>
       </div>
     </div>
   )
