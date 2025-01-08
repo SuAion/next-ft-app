@@ -15,6 +15,16 @@ export const prisma =
     log: ['query'], // 启用查询日志，方便调试
   })
 
+
+// 连接成功后输出日志
+prisma.$connect()
+  .then(() => {
+    console.log('数据库连接成功')
+  })
+  .catch((error) => {
+    console.error('数据库连接失败:', error)
+  })
+
 // 在开发环境中保存 PrismaClient 实例到全局对象
 // 这样可以在开发时避免创建过多的数据库连接
 if (process.env.NODE_ENV !== 'production') globalForPrisma.prisma = prisma

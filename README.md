@@ -172,3 +172,24 @@ Zustand 的单例问题：
 Zustand 在客户端运行时保持的是一个全局状态。
 服务端更改的状态不会自动同步到客户端，客户端会以自己的 Zustand 初始化值为主。
 通过 props 将服务端的 Zustand 状态传递到客户端，然后在客户端用这些 props 初始化客户端的 Zustand 状态，可以确保状态的一致性，并解决水合问题。
+
+## Prisma
+
+1. 先安装 Prisma CLI（如果尚未安装）：
+   npm install @prisma/cli --save-dev
+
+2. 再生成 Prisma 客户端
+   npx prisma generate
+
+3. 定义数据库的 schema.prisma
+   ```
+   model User {}
+   model Post {}
+   ```
+
+```
+
+## 推送到数据库
+
+npx prisma db push --schema=./src/prisma/schema.prisma
+```

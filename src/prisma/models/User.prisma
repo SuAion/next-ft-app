@@ -1,0 +1,11 @@
+
+// 这样用cuid  其实是避免切换数据库的时候，id字段会丢失
+
+// model User {
+//   id        String   @id @default(cuid())  // 使用 cuid() 生成唯一标识符
+//   email     String   @unique  // 邮箱字段，设置为唯一
+//   name      String?  // 可选的名字字段，问号表示该字段可以为空
+//   password  String   // 密码字段
+//   createdAt DateTime @default(now())  // 创建时间，默认为当前时间
+//   updatedAt DateTime @updatedAt  // 更新时间，自动更新
+// }

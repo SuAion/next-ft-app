@@ -7,8 +7,8 @@ generator client {
 // 数据库连接配置
 // 指定使用 MongoDB 作为数据库，并从环境变量中读取连接 URL
 datasource db {
-  provider = "mongodb"  // 使用 MongoDB 作为数据库提供者
-  url      = env("DATABASE_URL")  // 从 .env 文件读取数据库连接字符串
+  provider = "mongodb"  // 使用 MongoDB 作为数据库提供者  是mysql 可以改为mysql
+  url      = "mongodb://localhost:27017/admin"  // 从 .env 文件读取数据库连接字符串
 }
 
 // 用户模型定义
@@ -19,4 +19,6 @@ model User {
   password  String   // 密码字段
   createdAt DateTime @default(now())  // 创建时间，默认为当前时间
   updatedAt DateTime @updatedAt  // 更新时间，自动更新
+  @@map("User")  // 显式指定集合名称为 user
+
 }

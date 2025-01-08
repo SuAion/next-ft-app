@@ -285,3 +285,37 @@ export function gotoPersonalPageWithId(id?: string) {
     window.open(`/p/${id}`, '_blank');
   }
 }
+
+
+// 时间格式化操作，（以东八区北京时间为准）
+export function timeFormat(time, getHours = true, symbol = "-") {
+  let date = new Date(time);
+  let timezoneOffset = date.getTimezoneOffset();
+  date = new Date(date.getTime() + (timezoneOffset + 480) * 60 * 1000);
+  let year = date.getFullYear();
+  let month = date.getMonth() + 1;
+  let day = date.getDate();
+  let hours;
+  let minutes;
+  let seconds;
+  month = month > 9 ? month : "0" + month;
+  day = day > 9 ? day : "0" + day;
+  if (getHours) {
+    hours = date.getHours();
+    minutes = date.getMinutes();
+    seconds = date.getSeconds();
+    hours = hours > 9 ? hours : "0" + hours;
+    minutes = minutes > 9 ? minutes : "0" + minutes;
+    seconds = seconds > 9 ? seconds : "0" + seconds;
+    return {
+      str: year + symbol + month + symbol + day
+        + " " + hours + ":" + minutes + ":" + seconds,
+      timeStamp: date.getTime()
+    };
+  } else {
+    return {
+      str: year + symbol + month + symbol + day,
+      timeStamp: date.getTime()
+    };
+  }
+}

@@ -705,5 +705,12 @@
     "webtag_facebook": "Facebook Share",
     "webtag_linkedin": "Share on LinkedIn",
     "webtag_pinterest": "Pin on Pinterest",
-    "webtag_twitter": "Tweet"
+    "webtag_twitter": "Tweet",
+    "login": {
+        "title": "Login",
+        "email": "Email",
+        "password": "Password",
+        "submit": "Login",
+        "error": "Login failed"
+    }
 }

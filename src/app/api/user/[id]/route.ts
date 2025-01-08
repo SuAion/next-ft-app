@@ -1,4 +1,4 @@
-import { prisma } from '@/app/lib/prisma'
+import { prisma } from '../../../../prisma/prisma'
 import { NextResponse } from 'next/server'
 
 // 获取单个用户
@@ -29,8 +29,13 @@ export async function PUT(
   { params }: { params: { id: string } }
 ) {
   try {
-    const body = await request.json()
-    const { email, name } = body
+    // const body = await request.json()
+    // const { email, name } = body
+
+    const formData = await request.formData() // 获取 formData
+    const email = formData.get('email') as string // 从 formData 中提取 email
+    const name = formData.get('name') as string // 从 formData 中提取 name
+
 
     const user = await prisma.user.update({
       where: {
