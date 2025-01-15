@@ -101,7 +101,7 @@ export default function SignupForm() {
       <ul className="mt-2 space-y-2 border-b text-black" >
         {users.map(user => (
           <li key={user.id} className="flex justify-between items-center p-2 border-b">
-            <span>{user.name} - {user.email}</span>
+            <span>{user.name} - {user.email} - {user.password}</span>
             <div>
               <button onClick={() => handleEdit(user)} className="text-blue-500 hover:underline">编辑</button>
               <button onClick={() => handleDelete(user.id)} className="text-red-500 hover:underline ml-2">删除</button>
