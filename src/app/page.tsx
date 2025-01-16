@@ -51,7 +51,7 @@ export default function Home() {
     });
   }
   useEffect(() => {
-    loadMockData(10).then((data) => {
+    loadMockData(30).then((data) => {
       setWaterFullArr(data);
     });
   }, []);
@@ -74,14 +74,14 @@ export default function Home() {
                 />
               </div>
               <div className="card_info" style={{ paddingTop: item.imageHeight }}>
-                <p className="title">{item.info.title}</p>
+                <p className="title">{item.id}</p>
                 <div className="author">
                   <div className="avatar">
                   </div>
                   <div className="author-info">
                     <p className="author-name">{item.info.author}</p>
                     <p className="author-desc">
-                      Lorem ipsum dolor sit amet consectetur adipisicing elit.
+                      itemLorem ipsum dolor sit amet consectetur adipisicing elit.
                       Nobis, quod.
                     </p>
                   </div>

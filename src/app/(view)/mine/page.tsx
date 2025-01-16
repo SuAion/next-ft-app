@@ -1,7 +1,7 @@
 
 import { Suspense } from "react"
-import BlogSkeleton from "@/components/BlogSkeleton"
-import BlogList from '@/components/BlogList'
+import BlogSkeleton from "@/app/ui-components/BlogSkeleton"
+import BlogList from '@/app/ui-components/BlogList'
 import ClientSideCp from "@/components/ClientSideCp"
 import I18nWrapper from "@/HOC/I18nWrapper"
 
