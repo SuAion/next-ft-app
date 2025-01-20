@@ -5,11 +5,11 @@ import clsx from 'clsx';
 import { rafThrottle } from "@/utils";
 
 interface Blog {
-  id: string
-  title: string
-  author: string
-  category: string
-  date: string
+  id: string;
+  title: string;
+  author: string;
+  category: string;
+  date: string;
 }
 
 interface VirtualProps {
@@ -18,89 +18,74 @@ interface VirtualProps {
   style?: React.CSSProperties;
   columns: number;
   gap: number;
-  virtualData: Blog[]
+  virtualData: Blog[];
   dataHeight: number;
 }
 
 interface ChildProps {
   id: string;
-  columnWidth: number;
-  imageHeight: number;
-  imageWidth: number;
-  url: string;
-  info: {
-    [key: string]: any;
-  }
+  title: string;
+  author: string;
+  category: string;
+  date: string;
 }
 
 export const VirtualList = ({ children, virtualData, gap, dataHeight }: VirtualProps) => {
-  console.log('=======>virtualData', virtualData)
   const containerRef = useRef<HTMLDivElement>(null);
-  const [sliceRenderList, setSliceRenderList] = useState([]);
+  const [sliceRenderList, setSliceRenderList] = useState<Blog[]>([]);
+  const [position, setPosition] = useState({ startIndex: 0, endIndex: 0 });
 
-  const [position, setPosition] = useState({
-    startIndex: 0,
-    endIndex: 10
-  });
-
-  /** @计算容器高度可以最多放下多少个item **/
+  // 计算容器高度可以最多放下多少个item
   const getMaxRenderNum = () => {
-    return (containerRef.current?.offsetHeight / dataHeight) || 0;
+    return Math.ceil((containerRef.current?.offsetHeight || 0) / dataHeight);
   };
 
-  /**
-   * @计算上游标
-   * @上游标会随着滚动而改变
-   * **/
+  // 处理滚动事件，计算起始和结束索引
   const handleScroll = rafThrottle(() => {
-    const { scrollTop } = containerRef.current!;
-    /** @下游标始终等于上游标加上显示的个数 **/
-    const startIndex = Math.floor(scrollTop / dataHeight)
-    const endIndex = startIndex + getMaxRenderNum();
-    setPosition({
-      startIndex: startIndex,
-      endIndex: endIndex
-    });
+    if (!containerRef.current) return;
+    const { scrollTop } = containerRef.current;
+    const startIndex = Math.floor(scrollTop / dataHeight);
+    const endIndex = Math.min(startIndex + getMaxRenderNum(), virtualData.length);
+    setPosition({ startIndex, endIndex });
   });
 
-  /**
-   *  @计算要渲染的列表
-   * @列表是取出上游标和下游标之间的数据
-   *  **/
-  const getSliceRenderList = () => {
-    const { startIndex, endIndex } = position;
-    const sliceList = virtualData.slice(startIndex, endIndex);
-    console.log('=======>sliceList', sliceList)
-    setSliceRenderList([...sliceRenderList, ...sliceList,]);
-  };
-
-
-
+  // 更新要渲染的列表数据
   useEffect(() => {
-    containerRef.current?.addEventListener('scroll', handleScroll);
-    console.log('=======>virtualData111', virtualData)
-    getSliceRenderList()
-    console.log('=======>getMaxRenderNum()', getMaxRenderNum())
+    if (!containerRef.current) return;
+    // 初始化时加载列表
+    handleScroll();
+
+    // 添加滚动事件监听
+    const container = containerRef.current;
+    container.addEventListener('scroll', handleScroll);
+
     return () => {
-      containerRef.current?.removeEventListener('scroll', handleScroll);
+      container.removeEventListener('scroll', handleScroll);
     };
-  }, []);
-
-  useEffect(() => {
-    getSliceRenderList()
   }, [virtualData]);
 
-
-
+  // 根据position更新sliceRenderList
+  useEffect(() => {
+    const sliceList = virtualData.slice(position.startIndex, position.endIndex);
+    setSliceRenderList(sliceList);
+  }, [position, virtualData]);
 
   return (
-    <div className={clsx(styles['work-list-container'], 'water-container', 'flex')} ref={containerRef} style={{ gap }}>
-      {sliceRenderList.length}
-      {sliceRenderList.map((item) => (
-        <div key={item.id} data-id={item.id} className="water-item mb-2">
-          {children(item)}
-        </div>
-      ))}
+    <div className={styles['water-content']} ref={containerRef}>
+      <div
+        className={styles['water-list']}
+        style={{
+          gap,
+          height: `${dataHeight * (virtualData.length - position.startIndex)}px`,
+          transform: `translate3d(0, ${dataHeight * position.startIndex}px, 0)`,
+        }}
+      >
+        {sliceRenderList.map((item) => (
+          <div key={item.id} className="water-item mb-2">
+            {children(item)}
+          </div>
+        ))}
+      </div>
     </div>
   );
 };

@@ -23,25 +23,15 @@ export default function ShopList() {
 
 
   return (
-    <div className="p-4" style={{ height: '100vh', width: '100%' }}>
-      <h2 className="text-xl font-bold mb-4">测试列表</h2>
-      <div className="space-y-4">
-        <VirtualList virtualData={blogs} columns={3} gap={16} dataHeight={200}>
-          {(item) => ( // 将 children 作为函数传递
-            <div className=" water-templete  flex flex-col gap-4">
-              <div className="avatar">
-              </div>
-              <div className="author-info">
-                {/* <p className="author-name">{item.content}</p> */}
-                <p className="author-desc">
-                  itemLorem ipsum dolor sit amet consectetur adipisicing elit.
-                  Nobis, quod.
-                </p>
-              </div>
-            </div>
-          )}
-        </VirtualList>
-      </div>
+    <div className="space-y-4" style={{ height: '80vh', width: '100%', }}>
+      <VirtualList virtualData={blogs} columns={3} gap={16} dataHeight={100} style={{ width: '100%' }}>
+        {(item) => ( // 将 children 作为函数传递
+          <div data-author={item.author} className="gap-4" style={{ height: 100 }}>
+            <p className="author-name">{item.date}</p>
+            <p>{item.title}</p>
+          </div>
+        )}
+      </VirtualList>
     </div>
   );
 }
