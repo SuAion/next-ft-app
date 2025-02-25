@@ -63,8 +63,11 @@ function VirtualListNoHeight<T extends { id: number }>({ dataSource, children, e
 
     Array.from(nodes).forEach((node) => {
       const rect = node.getBoundingClientRect();
+
       const item = positions[+node.id];
+
       const dHeight = item.height - rect.height;
+      console.log('=======>dHeight', dHeight)
       if (dHeight) {
         item.height = rect.height;
         item.bottom = item.bottom - dHeight;
@@ -139,7 +142,7 @@ function VirtualListNoHeight<T extends { id: number }>({ dataSource, children, e
     initPosition();
     setTimeout(() => {
       setPosition();
-    });
+    }, 0);
   }, [dataSource.length]);
 
   useEffect(() => {

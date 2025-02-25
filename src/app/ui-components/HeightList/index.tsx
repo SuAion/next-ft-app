@@ -12,19 +12,17 @@ interface Blog {
 export default function HeightList() {
   const [dataSource, setDataSource] = useState([]);
   const addData = () => {
-    setTimeout(() => {
-      const newData = [];
-      for (let i = 0; i < 20; i++) {
-        const len: number = dataSource.length + newData.length;
-        newData.push({
-          id: len,
-          content: Mock.mock("@csentence(40, 100)"), // 内容
-        });
-      }
-      setDataSource([...dataSource, ...newData])
-    }, 0);
+    const newData = [];
+    for (let i = 0; i < 20; i++) {
+      const len: number = dataSource.length + newData.length;
+      newData.push({
+        id: len,
+        content: Mock.mock("@csentence(40, 100)"), // 内容
+      });
+    }
+    setDataSource([...dataSource, ...newData])
+    console.log('=======>dataSource', dataSource)
   };
-
 
   useEffect(() => {
     addData()

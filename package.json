@@ -3,7 +3,8 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": " nvm use v18 && cross-env NODE_ENV=development next dev --turbopack",
+    "dev": " nvm use v18 &&  cross-env NODE_ENV=development  next dev --turbopack ",
+    "dev:server": " nvm use v18 &&  cross-env NODE_ENV=development  node server/index ",
     "build": "next build",
     "start": "next start",
     "lint": "next lint"
@@ -15,6 +16,7 @@
     "react-dom": "^19.0.0",
     "react-i18next": "^15.4.0",
     "sass": "^1.83.0",
+    "ws": "^8.18.0",
     "zod": "^3.24.1",
     "zod-i18n-map": "^2.27.0",
     "zustand": "^5.0.2"
@@ -27,6 +29,7 @@
     "@types/node": "^20",
     "@types/react": "^19",
     "@types/react-dom": "^19",
+    "@types/ws": "^8.5.13",
     "clsx": "^2.1.1",
     "cross-env": "^7.0.3",
     "eslint": "^9.17.0",

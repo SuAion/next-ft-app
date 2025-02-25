@@ -193,3 +193,20 @@ Zustand 在客户端运行时保持的是一个全局状态。
 
 npx prisma db push --schema=./src/prisma/schema.prisma
 ```
+
+## 打包
+
+先npm run build 构建生产所欲要的.next 文件
+npm run start 启动服务暴露接口
+
+```
+部署 Next.js 应用时，执行 build 和 start 的顺序是非常重要的：
+npm run build: 这个命令必须在 npm run start 之前执行。build 命令会生成应用的生产版本，包括静态页面和需要在服务器上动态渲染的页面。这个过程会创建一个 .next 文件夹，其中包含了所有需要的构建文件。
+npm run start: 只有在 build 完成后，才能运行 start 命令。start 命令会启动一个服务器来提供这些构建好的文件，并处理动态请求。
+如果你不先执行 build，直接运行 start，服务器将没有可用的构建文件来提供服务，导致应用无法正常运行。因此，确保先执行 build，再执行 start 是至关重要的。
+```
+
+## WebSocket
+
+Next.js 的 API 路由和 WebSocket 的实现方式不兼容
+用api 路由的会复杂

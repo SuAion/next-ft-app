@@ -57,6 +57,24 @@ export default function Home() {
   }, []);
 
 
+
+  async function fetchStream() {
+    const response = await fetch('/api/stream'); // 替换为你的接口地址
+    const reader = response.body.getReader();
+    const decoder = new TextDecoder();
+
+    while (true) {
+      const { done, value } = await reader.read();
+      if (done) break; // 如果没有更多数据，退出循环
+
+      const chunk = decoder.decode(value, { stream: true });
+      console.log(chunk); // 处理接收到的数据
+    }
+  }
+
+  // fetchStream();
+
+
   return (
     <div className="public-section-container">
       <WaterFull columns={2} gap={20} waterFullData={WaterFullArr}>
