@@ -1,17 +1,15 @@
-import { PrismaClient } from '@prisma/client';
 import { NextResponse } from 'next/server'
 import { prisma } from '@/prisma/prisma';
 import { SignupFormSchema, FormState } from '@/prisma/validators/userValidator';
 // import { FotorMongoDB } from '@/database/connect/mongodb'
 
-const prismaClient = new PrismaClient();
 
 /** @获取所有用户 **/
 export async function GET() {
 
   try {
     console.log('=======>接口',)
-    const users = await prismaClient.user.findMany()
+    const users = await prisma.user.findMany()
     return NextResponse.json(users)
   } catch (error) {
     return NextResponse.json({ error: error }, { status: 500 })

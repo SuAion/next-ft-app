@@ -10,12 +10,10 @@ const SocketInstanceCp = () => {
         // 登录时，连接 WebSocket
         singleSocketClassInstance.setLogin('ws://localhost:3001/api/websocket');
 
-        // 发送一条消息
-        singleSocketClassInstance.sendMessage('Hello Server');
-
         // 添加回调函数，监听特定消息类型
         const handleMessage = (data: any) => {
-            console.log('client Received message:', data);
+            console.log('服务端发送的消息 注册的类型为message的回调:', data);
+            setMessages((prevMessages) => [...prevMessages, data]);
         };
         singleSocketClassInstance.addCallback('message', handleMessage);
 
@@ -27,36 +25,50 @@ const SocketInstanceCp = () => {
     }, []);
 
 
-    const sendMessage = () => {
+    const sendMessage = (e) => {
         if (singleSocketClassInstance.isConnected) {
 
             singleSocketClassInstance.sendMessage(JSON.stringify({
                 type: 'message',
-                data: input
+                data: e.target.value
             })); // 发送消息到服务器
             setInput(''); // 清空输入框
         }
     }
-
     return (
-        <div>
-            <h1>WebSocket 示例</h1>
-            <div>
+        <div className="flex flex-col justify-center items-center">
+            <ul role="list" className="divide-y divide-gray-100 w-9/12">
+                {messages.map(({ type, msg }, key) => {
+                    const isUser = false;
+                    return (
+                        <li key={key} className={`flex justify-between gap-x-6 py-2 ${isUser ? 'flex-row-reverse' : 'flex-row'}`}>
+                            <div className={`h-8 w-8 flex flex-col justify-center items-center rounded-full ${isUser ? 'bg-green-300' : 'bg-gray-200'}`}>{type.charAt(0)}</div>
+                            <div className="min-w-0 flex-auto">
+                                <p className={`text-sm font-semibold leading-6 text-gray-900 ${isUser ? 'text-right' : ''}`}>{msg}</p>
+                            </div>
+                        </li>
+                    )
+                })
+                }
+            </ul>
+            <form onSubmit={(e) => sendMessage(e)} className="mt-6 flex max-w-md gap-x-4">
                 <input
+                    id="chat"
+                    name="chat"
                     type="text"
+                    required
                     value={input}
+                    className="min-w-0 flex-auto rounded-md border-0 bg-white/5 px-3.5 py-2 shadow-sm ring-1 ring-inset ring-white/10 focus:ring-2 focus:ring-inset focus:ring-indigo-500 sm:text-sm sm:leading-6 text-black"
+                    placeholder="Chat with your friends"
                     onChange={(e) => setInput(e.target.value)}
                 />
-                <button onClick={sendMessage} >发送</button>
-            </div>
-            <div>
-                <h2>收到的消息:</h2>
-                <ul>
-                    {messages.map((msg, index) => (
-                        <li key={index}>{msg}</li>
-                    ))}
-                </ul>
-            </div>
+                <button
+                    type="submit"
+                    className="flex-none rounded-md bg-indigo-500 px-3.5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-indigo-400 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-500"
+                >
+                    Send
+                </button>
+            </form>
         </div>
     );
 }

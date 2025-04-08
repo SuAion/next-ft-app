@@ -1,4 +1,4 @@
-import { prisma } from '../../../../prisma/prisma'
+import { prisma } from '@/prisma/prisma'
 import { NextResponse } from 'next/server'
 
 // 获取单个用户

@@ -8,10 +8,10 @@ generator client {
 // 指定使用 MongoDB 作为数据库，并从环境变量中读取连接 URL
 datasource db {
   provider = "mongodb"  // 使用 MongoDB 作为数据库提供者  是mysql 可以改为mysql
-  url      = env("DATABASE_URL")  // 从 .env 文件读取数据库连接字符串
+  url      = env("MONGO_URI")  // 从 .env 文件读取数据库连接字符串
 }
 
-// 用户模型定义
+// 用户模型定义(如果要提取到其他的文件中，要使用插件手动@prisma/merge)
 model User {
   id        String   @id @default(auto()) @map("_id") @db.ObjectId  // MongoDB 的唯一标识符
   email     String   @unique  // 邮箱字段，设置为唯一

@@ -1,7 +1,7 @@
 // server.js
 const { createServer } = require('http');
 const { parse } = require('url');
-const next = require('next');
+const next = require('next').default;
 const WebSocket = require('ws');
 
 const dev = process.env.NODE_ENV !== 'production';
@@ -18,11 +18,11 @@ app.prepare().then(() => {
   const wsServer = new WebSocket.Server({ noServer: true });
 
   wsServer.on('connection', (socket) => {
-    console.log('New WebSocket connection');
+    console.log('服务端链接成功');
 
     socket.on('message', (message) => {
-      console.log('Received:', message);
-      socket.send(`Server received: ${ message }`);
+      console.log('服务端收到:', message);
+      socket.send(`${ message }`);
     });
 
     socket.on('close', () => {
