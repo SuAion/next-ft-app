@@ -1,10 +1,14 @@
 import { prisma } from '@/prisma/prisma'
 import { NextResponse } from 'next/server'
 
+interface Params {
+  id: string;
+  [key: string]: string; // 修正后的索引签名
+}
 // 获取单个用户
 export async function GET(
   request: Request,
-  { params }: { params: { id: string } }
+  { params }: { params: Params }
 ) {
   try {
     const user = await prisma.user.findUnique({
@@ -26,7 +30,7 @@ export async function GET(
 // 更新用户
 export async function PUT(
   request: Request,
-  { params }: { params: { id: string } }
+  { params }: { params: Params }
 ) {
   try {
     // const body = await request.json()
@@ -56,7 +60,7 @@ export async function PUT(
 // 删除用户
 export async function DELETE(
   request: Request,
-  { params }: { params: { id: string } }
+  { params }: { params: Params }
 ) {
   try {
     await prisma.user.delete({
