@@ -1,5 +1,7 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef, useState, useCallback } from 'react';
 import style from './index.module.scss';
+import { rafThrottle } from '@/utils';
+
 interface IPosInfo {
   index: number;
   height: number;
@@ -19,6 +21,7 @@ function VirtualListNoHeight<T extends { id: number }>({ dataSource, children, e
   const containerRef = useRef<HTMLDivElement | null>(null);
   const listRef = useRef<HTMLDivElement | null>(null);
   const [positions, setPositions] = useState<IPosInfo[]>([]);
+  const positionCache = useRef<Map<number, IPosInfo>>(new Map());
   const [state, setState] = useState({
     viewHeight: 0,
     listHeight: 0,
@@ -61,17 +64,27 @@ function VirtualListNoHeight<T extends { id: number }>({ dataSource, children, e
     const nodes = listRef.current?.children;
     if (!nodes || !nodes.length) return;
 
+    // 使用缓存优化性能
+    const cachedPositions = [...positions];
+
     Array.from(nodes).forEach((node) => {
       const rect = node.getBoundingClientRect();
 
       const item = positions[+node.id];
-
+      console.log(item)
       const dHeight = item.height - rect.height;
       console.log('=======>dHeight', dHeight)
       if (dHeight) {
         item.height = rect.height;
         item.bottom = item.bottom - dHeight;
         item.dHeight = dHeight;
+        // 更新缓存
+        positionCache.current.set(item.index, { ...item });
+      } else if (positionCache.current.has(item.index)) {
+        // 从缓存恢复
+        const cachedItem = positionCache.current.get(item.index)!;
+        item.height = cachedItem.height;
+        item.bottom = cachedItem.bottom;
       }
     });
 
@@ -90,7 +103,7 @@ function VirtualListNoHeight<T extends { id: number }>({ dataSource, children, e
       }
     }
     setState((prevState) => ({ ...prevState, listHeight: positions[len - 1].bottom }));
-  };
+  }
 
   const init = () => {
     setState((prevState) => ({
@@ -105,14 +118,19 @@ function VirtualListNoHeight<T extends { id: number }>({ dataSource, children, e
     containerRef.current?.removeEventListener('scroll', handleScroll);
   };
 
-  const handleScroll = () => {
-    const { scrollTop, clientHeight, scrollHeight } = containerRef.current!;
+  const handleScroll = useCallback(rafThrottle(() => {
+    if (!containerRef.current) return;
+    const { scrollTop, clientHeight, scrollHeight } = containerRef.current;
     setState((prevState) => ({ ...prevState, startIndex: binarySearch(positions, scrollTop) }));
     const bottom = scrollHeight - clientHeight - scrollTop;
     if (bottom <= 20) {
-      getMoreData();
+      try {
+        getMoreData();
+      } catch (error) {
+        console.error('Error loading more data:', error);
+      }
     }
-  };
+  }), [positions, getMoreData]);
 
   const binarySearch = (list: IPosInfo[], value: number) => {
     let left = 0,
@@ -132,7 +150,11 @@ function VirtualListNoHeight<T extends { id: number }>({ dataSource, children, e
   };
 
   useEffect(() => {
-    init();
+    try {
+      init();
+    } catch (error) {
+      console.error('Error initializing virtual list:', error);
+    }
     return () => {
       destroy();
     };

@@ -11,7 +11,6 @@ interface Store {
 export const baseStore = create<Store>((set) => ({
     posts: [],
     setPosts: (posts) => {
-        console.log('setPosts', posts)
         set({ posts })
     },
     count: 60,

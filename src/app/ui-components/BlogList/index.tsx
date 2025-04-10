@@ -7,26 +7,27 @@ interface Blog {
   date: string
 }
 export default async function BlogList() {
-  let blogs: Blog[] = [];
-
   try {
+    const controller = new AbortController();
+    const timeout = setTimeout(() => controller.abort(), 5000); // 5秒超时
 
-    const res = await fetch('https://api.vercel.app/blog')
-    blogs = await res.json();
+    const response = await fetch('https://api.vercel.app/blog', {
+      signal: controller.signal
+    });
+    clearTimeout(timeout);
+
+    if (!response.ok) {
+      throw new Error('Failed to fetch blogs');
+    }
+
+    const blogs = await response.json();
+    return (
+      <div>
+        {/* 渲染博客列表 */}
+      </div>
+    );
   } catch (error) {
     console.error('Failed to fetch blogs:', error);
+    return <div>无法加载博客列表，请稍后重试</div>;
   }
-
-  return (
-    <div className="p-4">
-      <h2 className="text-xl font-bold mb-4">博客列表</h2>
-      <div className="space-y-4">
-        {blogs.map((blog) => (
-          <div key={blog.id} className="border p-4 rounded-lg shadow">
-            <h3 className="text-lg font-semibold">{blog.title}</h3>
-          </div>
-        ))}
-      </div>
-    </div>
-  );
 }

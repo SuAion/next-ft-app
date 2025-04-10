@@ -92,7 +92,6 @@ export default function Home() {
                 />
               </div>
               <div className="card_info" style={{ paddingTop: item.imageHeight }}>
-                <p className="title">{item.id}</p>
                 <div className="author">
                   <div className="avatar">
                   </div>

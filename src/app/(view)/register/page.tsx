@@ -1,6 +1,6 @@
 'use client'
 
-import { Signup, fetchUsers, deleteUser, updateUser } from '@/app/actions/UserActionMap';
+import { RegisUser, fetchUsers, deleteUser, updateUser } from '@/actions/UserActionMap';
 import { useEffect, useState } from 'react'
 
 export default function SignupForm() {
@@ -14,7 +14,7 @@ export default function SignupForm() {
     setPending(true);
     const formData = new FormData(event.target);
     try {
-      const result = await Signup(formData);
+      const result = await RegisUser(formData);
       setState(result);
       fetchUsersList();
     } catch (error) {

@@ -288,36 +288,47 @@ export function gotoPersonalPageWithId(id?: string) {
 
 
 // 时间格式化操作，（以东八区北京时间为准）
-export function timeFormat(time, getHours = true, symbol = "-") {
-  let date = new Date(time);
-  let timezoneOffset = date.getTimezoneOffset();
-  date = new Date(date.getTime() + (timezoneOffset + 480) * 60 * 1000);
-  let year = date.getFullYear();
-  let month = date.getMonth() + 1;
-  let day = date.getDate();
-  let hours;
-  let minutes;
-  let seconds;
-  month = month > 9 ? month : "0" + month;
-  day = day > 9 ? day : "0" + day;
+export function timeFormat(
+  time: string | number | Date,
+  getHours: boolean = true,
+  symbol: string = "-"
+): { str: string; timeStamp: number } {
+  // 参数校验
+  if (!time) {
+    throw new Error('Time parameter is required');
+  }
+
+  // 创建日期对象并处理时区
+  const date = new Date(time);
+  if (isNaN(date.getTime())) {
+    throw new Error('Invalid time parameter');
+  }
+
+  // 转换为东八区时间
+  const timezoneOffset = date.getTimezoneOffset();
+  const beijingDate = new Date(date.getTime() + (timezoneOffset + 480) * 60 * 1000);
+
+  // 格式化日期部分
+  const year = beijingDate.getFullYear();
+  const month = String(beijingDate.getMonth() + 1).padStart(2, '0');
+  const day = String(beijingDate.getDate()).padStart(2, '0');
+
+  // 处理返回值
   if (getHours) {
-    hours = date.getHours();
-    minutes = date.getMinutes();
-    seconds = date.getSeconds();
-    hours = hours > 9 ? hours : "0" + hours;
-    minutes = minutes > 9 ? minutes : "0" + minutes;
-    seconds = seconds > 9 ? seconds : "0" + seconds;
+    const hours = String(beijingDate.getHours()).padStart(2, '0');
+    const minutes = String(beijingDate.getMinutes()).padStart(2, '0');
+    const seconds = String(beijingDate.getSeconds()).padStart(2, '0');
+    
     return {
-      str: year + symbol + month + symbol + day
-        + " " + hours + ":" + minutes + ":" + seconds,
-      timeStamp: date.getTime()
-    };
-  } else {
-    return {
-      str: year + symbol + month + symbol + day,
-      timeStamp: date.getTime()
+      str: `${year}${symbol}${month}${symbol}${day} ${hours}:${minutes}:${seconds}`,
+      timeStamp: beijingDate.getTime()
     };
   }
+
+  return {
+    str: `${year}${symbol}${month}${symbol}${day}`,
+    timeStamp: beijingDate.getTime()
+  };
 }
 
 export function rafThrottle(fn: Function) {

@@ -210,3 +210,11 @@ npm run start: 只有在 build 完成后，才能运行 start 命令。start 命
 
 Next.js 的 API 路由和 WebSocket 的实现方式不兼容
 用api 路由的会复杂
+
+## 打包构建
+
+1. 构建生产环境
+   npm run build 的时候
+   失败原因
+   1.SSR页面　接口不通
+   2.TS格式校验验证失败

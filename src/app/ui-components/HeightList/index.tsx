@@ -20,8 +20,11 @@ export default function HeightList() {
         content: Mock.mock("@csentence(40, 100)"), // 内容
       });
     }
-    setDataSource([...dataSource, ...newData])
-    console.log('=======>dataSource', dataSource)
+    setDataSource(prevData => {
+      const updatedData = [...prevData, ...newData];
+      console.log('=======>Updated dataSource', updatedData);
+      return updatedData;
+    })
   };
 
   useEffect(() => {

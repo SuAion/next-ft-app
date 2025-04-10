@@ -18,13 +18,27 @@
 import ClientSideCp from "@/components/ClientSideCp";
 import ServerSideCp from "@/components/ServerSideCp";
 
-
-
-
-
 export default async function Home() {
-  const response = await fetch('https://api.vercel.app/blog');
-  const blogs = await response.json();
+  let blogs = [];
+  try {
+    // 添加超时控制
+    const controller = new AbortController();
+    const timeout = setTimeout(() => controller.abort(), 5000); // 5秒超时
+
+    const response = await fetch('https://api.vercel.app/blog', {
+      signal: controller.signal
+    });
+    clearTimeout(timeout);
+
+    if (!response.ok) {
+      throw new Error('Failed to fetch data');
+    }
+    blogs = await response.json();
+  } catch (error) {
+    console.error('数据获取失败:', error);
+    // 返回空数据或默认数据，确保构建成功
+    blogs = [];
+  }
 
   return (
     <div>
