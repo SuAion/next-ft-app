@@ -1,20 +1,16 @@
 
 'use client'
 import I18nWrapper from '@/HOC/I18nWrapper';
-import { createGlobalStore, GlobalStoreProvider } from '@/store/globalStore';
 export default function ExploreLayout({
   children,
 }: {
   children: React.ReactNode
 }) {
-  const globalStore = createGlobalStore()
   return (
-    <GlobalStoreProvider store={globalStore}>
-      <I18nWrapper>
-        <section className="explore-layout">
-          {children}
-        </section>
-      </I18nWrapper>
-    </GlobalStoreProvider>
+    <I18nWrapper>
+      <section className="explore-layout">
+        {children}
+      </section>
+    </I18nWrapper>
   )
 }

@@ -31,11 +31,15 @@ export async function fetchUserData(userId: string): Promise<User> {
 /** @用户_获取用户列表 **/
 export async function fetchUsers(): Promise<User[]> {
     try {
-        const response = await fetch('/api/user');
+        const response = await fetch('/api/user', {
+            method: 'GET',
+        });
         if (!response.ok) {
             throw new Error(`网络错误: ${response.statusText}`);
         }
+
         const data: User[] = await response.json();
+        console.log('=======>data', data)
         return data;
     } catch (error) {
         console.error("获取用户列表失败:", error);
@@ -50,7 +54,7 @@ export async function Signup(inputData: FormData) {
     formData.append('password', inputData.get('password') || '');
     try {
         const response = await fetch('/api/user', {
-            method: 'PUT',
+            method: 'POST',
             body: formData,
         });
 
@@ -66,6 +70,7 @@ export async function Signup(inputData: FormData) {
 /** @用户_注册 **/
 export async function RegisUser(inputData: FormData) {
     const formData = new FormData();
+    formData.append('name', inputData.get('name') || '');
     formData.append('email', inputData.get('email') || '');
     formData.append('password', inputData.get('password') || '');
     try {

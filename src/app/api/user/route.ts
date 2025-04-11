@@ -6,7 +6,6 @@ import bcrypt from 'bcrypt';
 
 /** @获取所有用户 **/
 export async function GET() {
-
   try {
     const users = await prisma.user.findMany()
     return NextResponse.json(users)
@@ -15,12 +14,10 @@ export async function GET() {
   }
 }
 
-
 /** @注册用户 **/
-export async function POST(request) {
+export async function PUT(request) {
   // formData
   const data = await request.formData(); // 从请求中获取数据
-  console.log('=======>', data.get('name'))
 
   const validatedFields = RegisFormSchema.safeParse({
     name: data.get('name'), // 使用从请求中获取的数据
@@ -59,7 +56,7 @@ export async function POST(request) {
 
 
 /** @登录用户 **/
-export async function PUT(request) {
+export async function POST(request) {
   try {
     const data = await request.formData();
     const email = data.get('email');

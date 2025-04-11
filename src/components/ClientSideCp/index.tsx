@@ -1,24 +1,22 @@
-// ClientSideCp.tsx
 "use client";
-
 import { useEffect } from "react";
 import { baseStore } from "@/store/baseStore";
 import { useTranslation } from 'react-i18next';
+
 export default function ClientSideCp({ initialPosts }) {
-  const count = baseStore(state => state.count)
+  const count = baseStore(state => state.count);
   const posts = baseStore((state) => state.posts);
   const setPosts = baseStore((state) => state.setPosts);
 
+  const { t, i18n } = useTranslation();
 
-  const { t, i18n } = useTranslation(); // 获取 t 函数和 i18n 对象
-  // console.log('=======>i18n', i18n)
   const changeLanguage = (lng) => {
-    i18n.changeLanguage(lng); // 切换语言
+    i18n.changeLanguage(lng);
   };
 
   useEffect(() => {
     if (posts.length === 0) {
-      setPosts(initialPosts); // 初始化 Zustand 状态
+      setPosts(initialPosts);
     }
   }, [initialPosts, posts, setPosts]);
 
