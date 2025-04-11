@@ -20,6 +20,7 @@ export const prisma =
 prisma.$connect()
   .then(() => {
     console.log('数据库连接成功')
+    console.log('=======>process.env.DATABASE_URL', process.env.DATABASE_URL)
   })
   .catch((error) => {
     console.error('数据库连接失败:', error)
