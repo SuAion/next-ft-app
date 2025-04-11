@@ -4,7 +4,6 @@
   "private": true,
   "scripts": {
     "dev": " nvm use v18 &&  cross-env NODE_ENV=development  next dev --turbopack ",
-    "dev:server": " nvm use v18 &&  cross-env NODE_ENV=development  node server/index ",
     "build": "next build",
     "start": "next start",
     "lint": "next lint"
