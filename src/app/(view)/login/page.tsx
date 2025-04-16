@@ -1,6 +1,6 @@
 'use client'
 
-import { Signup } from '@/actions/UserActionMap';
+import { Signup } from '@/services/UserActionMap';
 import { useState } from 'react';
 import { motion } from 'framer-motion';
 import Link from 'next/link';

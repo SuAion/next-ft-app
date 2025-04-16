@@ -706,11 +706,10 @@
     "webtag_linkedin": "Share on LinkedIn",
     "webtag_pinterest": "Pin on Pinterest",
     "webtag_twitter": "Tweet",
-    "login": {
-        "title": "Login",
-        "email": "Email",
-        "password": "Password",
-        "submit": "Login",
-        "error": "Login failed"
+    "validation": {
+        "name_min_length": "Name must be at least 2 characters long.",
+        "valid_email": "'Please enter a valid email.",
+        "password_min_length": "Be at least 8 characters long",
+        "password_mismatch": "Passwords do not match"
     }
 }

@@ -1,5 +1,5 @@
 'use client'
-import { fetchBlogs } from "@/actions/TestActionMap"
+import { fetchBlogs } from "@/services/TestActionMap"
 import { VirtualList } from "@/components/VirtualList"
 import { useEffect, useState } from "react"
 

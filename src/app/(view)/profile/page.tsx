@@ -1,5 +1,6 @@
+"use client"
 
-import { Suspense } from "react"
+import { Suspense, use } from "react"
 import I18nWrapper from "@/HOC/I18nWrapper"
 import UserProfileCard from "@/app/ui-components/Profile/UserProfileCard"
 import OrderHistory from "@/app/ui-components/Profile/OrderHistory"

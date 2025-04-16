@@ -1,13 +1,23 @@
 'use client'
 
-import { RegisUser, fetchUsers, deleteUser, updateUser } from '@/actions/UserActionMap';
+import { RegisUser, fetchUsers, deleteUser, updateUser } from '@/services/UserActionMap';
 import { useEffect, useState } from 'react'
+import { useTranslation } from 'react-i18next';
 
 export default function SignupForm() {
   const [state, setState] = useState(null);
   const [pending, setPending] = useState(false);
   const [users, setUsers] = useState([]);
   const [editUser, setEditUser] = useState(null);
+
+
+  const { i18n } = useTranslation();
+  console.log('=======>i18n', i18n)
+
+  const changeLanguage = (lng) => {
+    console.log('=======>lng', lng)
+    i18n.changeLanguage(lng);
+  };
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -65,6 +75,8 @@ export default function SignupForm() {
   return (
     <div className="form w-600 flex flex-col p-4 bg-gray-100 rounded shadow-md">
       <h1 className="text-xl text-black font-bold mb-4">{editUser ? '更新用户' : '注册用户'}</h1>
+      <button className="text-xl text-black font-bold mb-4" onClick={() => changeLanguage('zh')}>切换中文</button>
+      <button className="text-xl text-black font-bold mb-4" onClick={() => changeLanguage('en')}>切换英文</button>
       <form onSubmit={editUser ? handleUpdate : handleSubmit} className="space-y-4">
         <div>
           <label htmlFor="name" className="text-black block text-sm font-medium">姓名</label>
@@ -84,7 +96,6 @@ export default function SignupForm() {
         </div>
         {state?.errors?.password && (
           <div>
-            <p className="text-red-500">密码必须:</p>
             <ul className="list-disc list-inside text-red-500">
               {state.errors.password.map((error) => (
                 <li key={error}>- {error}</li>

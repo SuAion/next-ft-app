@@ -2,7 +2,8 @@ import { NextResponse } from 'next/server'
 import { prisma } from '@/lib/prisma';
 import { SignupFormSchema, RegisFormSchema } from '@/validators/userValidator';
 import bcrypt from 'bcrypt';
-
+const jwt = require('jsonwebtoken');
+import { cookies } from 'next/headers'
 
 /** @获取所有用户 **/
 export async function GET() {
@@ -95,15 +96,46 @@ export async function POST(request) {
       return NextResponse.json({
         success: false,
         error: '密码错误'
-      }, { status: 401 });
+      }, { status: 400 });
     }
 
     console.log(`用户登录成功: ${email}`);
+
+    // 生成JWT token
+    const tokenExp = new Date(Date.now() + 10 * 60 * 1000); // 10分钟后过期
+    const token = jwt.sign(
+      {
+        id: user.id,
+        email: user.email,
+        exp: Math.floor(tokenExp.getTime() / 1000)
+      },
+      process.env.JWT_SECRET
+    );
+
+    // 更新用户token过期时间
+    await prisma.user.update({
+      where: { id: user.id },
+      data: {
+        token
+      }
+    });
+
+    const cookieStore = await cookies()
+    cookieStore.set('token', `${token}`)
+
+    // 设置cookies 过期
+    // (await cookies()).set('name', 'value', { maxAge: 0 })
+
     return NextResponse.json({
       success: true,
       code: 200,
       message: '登录成功',
-      data: user
+      data: {
+        id: user.id,
+        name: user.name,
+        email: user.email,
+        token,
+      }
     }, { status: 200 });
 
   } catch (error) {
@@ -112,7 +144,6 @@ export async function POST(request) {
       success: false,
       error: '登录失败',
       code: 500,
-      message: '登录成功',
     }, { status: 500 });
   }
 }

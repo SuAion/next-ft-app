@@ -705,5 +705,11 @@
     "webtag_facebook": "分享到Facebook",
     "webtag_linkedin": "分享到LinkedIn",
     "webtag_pinterest": "分享到Pinterest",
-    "webtag_twitter": "Tweet"
+    "webtag_twitter": "Tweet",
+    "validation": {
+        "name_min_length": "至少 2 个字符",
+        "valid_email": "请输入有效的邮箱地址",
+        "password_min_length": "至少 8 个字符",
+        "password_mismatch": "密码不匹配"
+    }
 }
