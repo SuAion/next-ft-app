@@ -30,7 +30,7 @@ export default function RootLayout({
       >
         <I18nWrapper>
           {children}
-          <BottomNav />
+          {/* <BottomNav /> */}
         </I18nWrapper>
       </body>
     </html>

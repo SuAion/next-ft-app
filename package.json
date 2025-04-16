@@ -6,7 +6,7 @@
     "dev": " nvm use v18 &&  cross-env NODE_ENV=development  next dev --turbopack ",
     "build": "next build",
     "start": "next start",
-    "postinstall": "prisma generate",
+    "postinstall": "npx prisma generate",
     "lint": "next lint"
   },
   "dependencies": {
@@ -42,6 +42,7 @@
     "eslint-plugin-prettier": "^5.2.1",
     "eslint-plugin-react": "^7.37.3",
     "globals": "^15.14.0",
+    "jose": "^6.0.10",
     "mockjs": "^1.1.0",
     "mongodb": "^6.12.0",
     "postcss": "^8",

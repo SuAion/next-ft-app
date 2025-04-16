@@ -1,28 +1,29 @@
-import { NextResponse } from 'next/server'
-import type { NextRequest } from 'next/server'
+// middleware.ts
+import { NextRequest, NextResponse } from 'next/server'
+import { jwtVerify } from 'jose'
 
-const protectedRoutes = [
-    '/profile',
-    '/login',
-    '/register',
-]
+const PUBLIC_PATHS = ['/api', '/login', '/register']
 
-export function middleware(request: NextRequest) {
-    const token = request.cookies.get('token')?.value
-    console.log('=======>Middleware triggered for path:', request.nextUrl.pathname)
-    console.log('=======>Token:', token)
-    if (protectedRoutes.some(route => request.nextUrl.pathname.startsWith(route))) {
-        console.log('=======>Protected route accessed:', request.nextUrl.pathname)
-        // if (!token) {
-        //     return NextResponse.redirect(new URL('/login', request.url))
-        // }
-        // 这里可以添加token验证逻辑
-        // 例如调用API验证token有效性
+export async function middleware(req: NextRequest) {
+    const { pathname } = req.nextUrl
+    if (PUBLIC_PATHS.some(path => pathname.startsWith(path))) {
+        console.log('=======>到这二来了')
+        return NextResponse.next()
     }
 
-    return NextResponse.next()
-}
+    const token = req.cookies.get('token')?.value
+    if (!token) {
+        return NextResponse.redirect(new URL('/login', req.url))
+    }
 
+    try {
+        await jwtVerify(token, new TextEncoder().encode(process.env.JWT_SECRET))
+        return NextResponse.next()
+    } catch {
+        return NextResponse.redirect(new URL('/login', req.url))
+    }
+}
+// 配置需要应用中间件的路径
 export const config = {
-    matcher: ['/((?!api|_next/static|_next/image|favicon.ico).*)'],
+    matcher: ['/admin/:path*', '/explore'],
 }

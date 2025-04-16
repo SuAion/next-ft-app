@@ -4,11 +4,12 @@ import { Signup } from '@/services/UserActionMap';
 import { useState } from 'react';
 import { motion } from 'framer-motion';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 
 export default function LoginPage() {
     const [state, setState] = useState(null);
     const [pending, setPending] = useState(false);
-
+    const router = useRouter()
     const handleSubmit = async (event) => {
         event.preventDefault();
         setPending(true);
@@ -17,6 +18,8 @@ export default function LoginPage() {
             const result = await Signup(formData);
             console.log(result)
             setState(result);
+            // 使用 router.push 进行路由跳转
+            router.push('/admin/posts');
         } catch (error) {
             console.error('登录失败:', error);
         } finally {

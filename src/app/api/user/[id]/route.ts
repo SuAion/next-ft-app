@@ -1,26 +1,36 @@
-import { prisma } from '@/lib/prisma'
-import { NextResponse } from 'next/server'
 type Params = Record<string, string | string[]>
 
 // 获取单个用户
-export async function GET(
-  request: Request,
-  { params }: { params: Promise<Params> }
-) {
-  const resolvedParams = await params; // 等待 params 解析
+// app/api/auth/me/route.ts
+import { prisma } from '@/lib/prisma'
+import jwt from 'jsonwebtoken'
+import { cookies } from 'next/headers'
+import { NextResponse } from 'next/server'
+
+const SECRET = process.env.JWT_SECRET || 'secret'
+
+export async function GET() {
   try {
+    const cookieStore = await cookies();
+    const token = cookieStore.get('token')?.value
+    if (!token) throw new Error('未登录')
+
+    const decoded = jwt.verify(token, SECRET) as { id: string }
+
     const user = await prisma.user.findUnique({
-      where: {
-        id: resolvedParams.id as string,
+      where: { id: decoded.id },
+      select: {
+        id: true,
+        email: true,
+        name: true,
+        isAdmin: true,
       },
     })
+    if (!user) throw new Error('用户不存在')
 
-    if (!user) {
-      return NextResponse.json({ error: '用户不存在' }, { status: 404 })
-    }
-    return NextResponse.json(user)
-  } catch (error) {
-    return NextResponse.json({ error: '获取用户失败' }, { status: 500 })
+    return NextResponse.json({ user })
+  } catch (err: any) {
+    return NextResponse.json({ error: err.message || '获取用户信息失败' }, { status: 401 })
   }
 }
 
