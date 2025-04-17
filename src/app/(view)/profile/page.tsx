@@ -1,9 +1,9 @@
-"use client"
+'use client';
 
-import { Suspense, use } from "react"
-import I18nWrapper from "@/HOC/I18nWrapper"
-import UserProfileCard from "@/app/ui-components/Profile/UserProfileCard"
-import OrderHistory from "@/app/ui-components/Profile/OrderHistory"
+import { Suspense, use } from 'react';
+import I18nWrapper from '@/hoc/I18nWrapper';
+import UserProfileCard from '@/app/ui-components/Display/Profile/UserProfileCard';
+import OrderHistory from '@/app/ui-components/Display/Profile/OrderHistory';
 
 export default function ProfilePage() {
   return (
@@ -29,5 +29,5 @@ export default function ProfilePage() {
         {/* </I18nWrapper> */}
       </div>
     </div>
-  )
+  );
 }
