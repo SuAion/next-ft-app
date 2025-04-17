@@ -10,7 +10,6 @@
 //     // 可以根据需要添加更多字段
 // };
 
-
 // interface Store {
 //     isMobile: boolean;
 //     posts: Post[];
@@ -19,8 +18,6 @@
 //     setMoney: (money: number) => void;
 //     setIsMobile: (isMobile: boolean) => void;
 // }
-
-
 
 // export const createGlobalStore = () => {
 //     createStore<Store>((set) => ({
@@ -49,10 +46,6 @@
 //     return useStore(store, selector);
 // };
 
-
-
-
-
 // // // 客户端直接使用
 
 // // "use client";
@@ -73,39 +66,32 @@
 // //   );
 // // }
 
-
-
-
-
 'use client';
 import { create } from 'zustand';
 
 // 声明 Post 类型
 type Post = {
-    id: number; // 帖子的唯一标识符
-    title: string; // 帖子的标题
-    // 可以根据需要添加更多字段
+  id: number; // 帖子的唯一标识符
+  title: string; // 帖子的标题
+  // 可以根据需要添加更多字段
 };
 
-
 interface Store {
-    isMobile: boolean;
-    posts: Post[];
-    setPosts: (posts: Post[]) => void;
-    money: number,
-    setMoney: (money: number) => void;
-    setIsMobile: (isMobile: boolean) => void;
+  isMobile: boolean;
+  posts: Post[];
+  permissions: string[];
+  setPosts: (posts: Post[]) => void;
+  money: number;
+  setMoney: (money: number) => void;
+  setIsMobile: (isMobile: boolean) => void;
 }
 
-
-
 export const globalStore = create<Store>((set) => ({
-    isMobile: typeof window !== 'undefined' ? window.innerWidth < 750 : false,
-    setIsMobile: (isMobile: boolean) => set((state) => ({ ...state, isMobile })),
-    posts: [] as Post[],
-    money: 100 as number,
-    setPosts: (posts: Post[]) => set((state) => ({ ...state, posts })),
-    setMoney: (money: number) => set((state) => ({ ...state, money })),
+  isMobile: typeof window !== 'undefined' ? window.innerWidth < 750 : false,
+  setIsMobile: (isMobile: boolean) => set((state) => ({ ...state, isMobile })),
+  posts: [] as Post[],
+  permissions: [] as string[],
+  money: 100 as number,
+  setPosts: (posts: Post[]) => set((state) => ({ ...state, posts })),
+  setMoney: (money: number) => set((state) => ({ ...state, money })),
 }));
-
-

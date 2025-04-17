@@ -2,6 +2,7 @@
 @tailwind components;
 @tailwind utilities;
 
+@import './common.scss';
 :root {
   --background: #ffffff;
   --foreground: #171717;
@@ -21,12 +22,11 @@ body {
 }
 
 .card-box {
-  width: 100%;
-  height: 100%;
   border-radius: 10px;
   position: relative;
   .card_img {
     position: absolute;
+    top: 0;
     width: 100%;
 
     img {

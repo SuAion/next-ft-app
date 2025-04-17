@@ -1,5 +1,6 @@
 'use client';
 
+import FTImage from '@/components/FTImage';
 import FTScroll from '@/components/FTScroll';
 import WaterFull from '@/components/WaterFull';
 import { Metadata } from 'next';
@@ -27,7 +28,6 @@ export default function Home() {
   const [loading, setLoading] = useState(false);
   const [page, setPage] = useState(1);
   const [hasMore, setHasMore] = useState(true); // 是否还有更多数据
-  const [error, setError] = useState<string>(''); // 错误状态
 
   // 修改数据加载函数
   function loadMockData(num: number): Promise<WorkItem[]> {
@@ -60,7 +60,6 @@ export default function Home() {
   async function getData() {
     if (loading || !hasMore) return;
     setLoading(true);
-    setError('');
 
     try {
       const newData = await loadMockData(30);
@@ -71,7 +70,6 @@ export default function Home() {
       setWaterFullArr((prev) => [...prev, ...newData]);
       setPage((prev) => prev + 1);
     } catch (err) {
-      setError(err instanceof Error ? err.message : '加载失败，请重试');
     } finally {
       setLoading(false);
     }
@@ -84,9 +82,6 @@ export default function Home() {
 
   return (
     <div className="public-section-container">
-      {error && (
-        <p className="fixed top-4 left-1/2 -translate-x-1/2 bg-red-500 text-white px-4 py-2 rounded">{error}</p>
-      )}
       <p className="fixed top-4 right-4 bg-white px-2 py-1 rounded shadow">{WaterFullArr.length} 个作品</p>
       <FTScroll
         id="scroll"
@@ -94,22 +89,27 @@ export default function Home() {
         onScrollToBottom={getData}
         loading={loading}
         relativeNeedDropDownData={WaterFullArr}
-        showLoading={true}
       >
         <WaterFull columns={2} gap={20} waterFullData={WaterFullArr}>
           {(
             item, // 将 children 作为函数传递
           ) => (
             <div className=" water-templete  flex flex-col gap-4">
-              <div className="card-box">
+              <div
+                className="card-box"
+                style={
+                  {
+                    // paddingBottom: (item.imageHeight / item.imageWidth) * 100 + '%', // 计算高度占比,
+                  }
+                }
+              >
                 <div className="card_img">
-                  <Image
+                  <FTImage
                     className="dark:invert"
                     src={item.url}
                     alt="Next.js logo"
                     width={item.imageWidth}
                     height={item.imageHeight}
-                    style={{ width: '100%', height: 'auto' }} // 保持宽高比
                     priority
                   />
                 </div>
