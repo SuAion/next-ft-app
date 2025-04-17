@@ -1,0 +1,214 @@
+/*
+ * @Author: 
+ * @Date: 2024-04-24 17:14:49
+ * @LastEditors: orin qinaoyun@everimaging.com
+ * @LastEditTime: 2025-02-20 14:47:58
+ * @Description: 本文件禁止书写会被引入文件默认编译的内容
+ */
+
+$mobileMaxWidth: 750px;
+$PCHeaderHeight: 64px;
+
+@mixin scrollStyle($horizontal: false) {
+  &::-webkit-scrollbar {
+    @if $horizontal {
+      height: 6px;
+    } @else {
+      width: 6px;
+    }
+  }
+
+  &::-webkit-scrollbar-track {
+    background-color: transparent;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 25px;
+
+    &:hover {
+      background: rgba(255, 255, 255, 0.2);
+    }
+  }
+}
+
+@mixin scrollStyleNone() {
+  &::-webkit-scrollbar {
+    width: 0;
+    display: none;
+  }
+
+  &::-webkit-scrollbar-track {
+    background-color: transparent;
+    display: none;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background: transparent;
+    border-radius: 0;
+    display: none;
+  }
+}
+
+@mixin bigMedia {
+  @media screen and (min-width: 1600px) and (max-width: 1920px) {
+    @content;
+  }
+}
+
+@mixin mobileMedia {
+  @media (max-width: $mobileMaxWidth) {
+    @content;
+  }
+}
+
+@mixin notMobileMedia {
+  @media (min-width: $mobileMaxWidth) {
+    @content;
+  }
+}
+
+/** svg 填充色 */
+@mixin colorFillSvg($color: #ffffff, $svgCheckOwner: false) {
+  @if $svgCheckOwner {
+    &:not([owner-color]) {
+      fill: $color;
+      path {
+        fill: $color;
+      }
+      ellipse {
+        stroke: $color;
+        fill: $color;
+      }
+    }
+  } @else {
+    & {
+      fill: $color;
+      path {
+        fill: $color;
+      }
+      ellipse {
+        stroke: $color;
+        fill: $color;
+      }
+    }
+  }
+}
+
+/** font color 与下级 svg 填充色一致 */
+@mixin colorWithSvg($color: #ffffff, $svgCheckOwner: false) {
+  color: $color;
+
+  svg {
+    @include colorFillSvg($color, $svgCheckOwner);
+  }
+}
+
+/** 搜索专用的色块loading */
+@mixin searchSkeletonLoading($duration: 1s) {
+  @keyframes searchSkeleton {
+    0% {
+      background-position: 100% 50%;
+    }
+
+    100% {
+      background-position: 0 50%;
+    }
+  }
+  background: linear-gradient(-32.59deg, #27282c 25%, rgba(255, 255, 255, 0.2) 37%, #27282c 63%);
+  background-size: 400% 100%;
+  animation: searchSkeleton $duration ease infinite;
+}
+
+/** 普通的 skeleton loading */
+@mixin skeletonLoading($duration: 1s) {
+  @keyframes skeleton {
+    0% {
+      background-position: 100% 50%;
+    }
+
+    100% {
+      background-position: 0 50%;
+    }
+  }
+  background: linear-gradient(90deg, #333438 25%, #3b3c41 37%, #333438 63%);
+  background-size: 400% 100%;
+  animation: skeleton 1s ease infinite;
+}
+
+@mixin rotateLoading($duration: 1s) {
+  @keyframes rotate {
+    0% {
+      transform: rotate(0);
+    }
+
+    100% {
+      transform: rotate(1turn);
+    }
+  }
+  & {
+    animation: rotate $duration linear infinite;
+  }
+}
+
+@mixin textEllipsis() {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+@mixin textEllipsisLine($line: 2) {
+  @include textEllipsis();
+  display: -webkit-box;
+  white-space: normal;
+  -webkit-line-clamp: $line;
+  -webkit-box-orient: vertical;
+}
+
+@mixin maskColor() {
+  background: rgba(29, 29, 29, 0.6);
+  backdrop-filter: blur(20px);
+}
+
+@mixin primaryButton($justColor: false) {
+  background: #62ffb8;
+  @include colorWithSvg(#2b2b2b, true);
+
+  @media (hover: hover) {
+    &:hover {
+      background: #5de5a8;
+    }
+  }
+
+  &:active {
+    background: #5de5a8;
+    @include colorWithSvg(rgba(43, 43, 43, 0.6), true);
+  }
+
+  @if not $justColor {
+    border-radius: 6px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 10px 16px;
+    line-height: 20px;
+    font-size: 14px;
+    font-weight: 500;
+    letter-spacing: 0;
+    cursor: pointer;
+  }
+}
+
+// FC_SMALL_FONT_CLASS 统一引入避免拼错
+@mixin smallFCFont() {
+  :global(.fc-small-font) {
+    @content;
+  }
+}
+
+@mixin clearAntdTooltipBG() {
+  :global(.ant-tooltip-inner) {
+    background: transparent;
+    box-shadow: none;
+  }
+}

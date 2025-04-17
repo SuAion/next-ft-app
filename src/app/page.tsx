@@ -1,9 +1,9 @@
-'use client'
-import { WaterFull } from "@/components/WaterFull";
-import { Metadata } from "next";
-import Image from "next/image";
-import { use, useEffect, useState } from "react";
-
+'use client';
+import { FTScroll } from '@/components/FTScroll';
+import WaterFull from '@/components/WaterFull';
+import { Metadata } from 'next';
+import Image from 'next/image';
+import { use, useEffect, useState } from 'react';
 
 interface WorkItem {
   id: string;
@@ -12,7 +12,7 @@ interface WorkItem {
   url: string;
   info: {
     [key: string]: any;
-  }
+  };
 }
 // 顶级meta 页面meta与此合并
 // export const metadata: Metadata = {
@@ -21,93 +21,97 @@ interface WorkItem {
 //     'Explore more AI artworks and boost engagement through AI image creation on Fotor visual creative community.',
 // };
 
-
 export default function Home() {
-
   const [WaterFullArr, setWaterFullArr] = useState<WorkItem[]>([]);
+  const [loading, setLoading] = useState(false);
+  const [page, setPage] = useState(1); // 添加页码状态
 
+  // 修改数据加载函数
   function loadMockData(num: number): Promise<WorkItem[]> {
-    // 生成模拟数据
-    return new Promise((resolve, reject) => {
+    return new Promise((resolve) => {
       let mockData = [];
-      for (let i = 0; i < num; i++) {
-        const id = `work_id_${i}`;
-        const width = Math.floor(Math.random() * 201) + 300; // 300 到 500 之间的随机数
-        const height = Math.floor(Math.random() * 201) + 300; // 300 到 500 之间的随机数
+      const startIndex = (page - 1) * num;
+      for (let i = startIndex; i < startIndex + num; i++) {
+        const width = Math.floor(Math.random() * 201) + 300;
+        const height = Math.floor(Math.random() * 201) + 300;
         const info = {
           id: i,
           imageWidth: width,
           imageHeight: height,
           url: `https://picsum.photos/${width}/${height}?${Math.floor(Math.random() * 201)}`,
           info: {
-            bgColor: "#565646",
-            title: "标题标题标题标题标题标题标题标题标题",
-            author: "作者",
-          }
+            bgColor: '#565646',
+            title: '标题标题标题标题标题标题标题标题标题',
+            author: '作者',
+          },
         };
         mockData.push(info);
       }
       resolve(mockData);
     });
   }
-  useEffect(() => {
-    loadMockData(30).then((data) => {
-      setWaterFullArr(data);
-    });
-  }, []);
 
-
-
-  async function fetchStream() {
-    const response = await fetch('/api/stream'); // 替换为你的接口地址
-    const reader = response.body.getReader();
-    const decoder = new TextDecoder();
-
-    while (true) {
-      const { done, value } = await reader.read();
-      if (done) break; // 如果没有更多数据，退出循环
-
-      const chunk = decoder.decode(value, { stream: true });
-      console.log(chunk); // 处理接收到的数据
+  // 修改数据获取函数
+  async function getData() {
+    if (loading) return;
+    setLoading(true);
+    try {
+      const newData = await loadMockData(30);
+      setWaterFullArr((prev) => [...prev, ...newData]);
+      setPage((prev) => prev + 1);
+    } finally {
+      setLoading(false);
     }
   }
 
-  // fetchStream();
-
+  // 初始加载
+  useEffect(() => {
+    getData();
+  }, []);
 
   return (
     <div className="public-section-container">
-      <WaterFull columns={2} gap={20} waterFullData={WaterFullArr}>
-        {(item) => ( // 将 children 作为函数传递
-          <div className=" water-templete  flex flex-col gap-4">
-            <div className="card-box">
-              <div className="card_img">
-                <Image
-                  className="dark:invert"
-                  src={item.url}
-                  alt="Next.js logo"
-                  width={item.imageWidth}
-                  height={item.imageHeight}
-                  priority
-                />
-              </div>
-              <div className="card_info" style={{ paddingTop: item.imageHeight }}>
-                <div className="author">
-                  <div className="avatar">
-                  </div>
-                  <div className="author-info">
-                    <p className="author-name">{item.info.author}</p>
-                    <p className="author-desc">
-                      itemLorem ipsum dolor sit amet consectetur adipisicing elit.
-                      Nobis, quod.
-                    </p>
+      <p className="fixed w-10 bg-white red">{WaterFullArr.length}</p>
+      <FTScroll
+        id="scroll"
+        className="scroll-container"
+        onScrollToBottom={getData}
+        loading={loading}
+        relativeNeedDropDownData={WaterFullArr}
+        showLoading={true}
+      >
+        <WaterFull columns={2} gap={20} waterFullData={WaterFullArr}>
+          {(
+            item, // 将 children 作为函数传递
+          ) => (
+            <div className=" water-templete  flex flex-col gap-4">
+              <div className="card-box">
+                <div className="card_img">
+                  <Image
+                    className="dark:invert"
+                    src={item.url}
+                    alt="Next.js logo"
+                    width={item.imageWidth}
+                    height={item.imageHeight}
+                    priority
+                  />
+                </div>
+                <div className="card_info" style={{ paddingTop: item.imageHeight }}>
+                  <div className="author">
+                    <div className="avatar"></div>
+                    <div className="author-info">
+                      <p className="author-name">{item.info.author}</p>
+                      <p className="author-desc">
+                        itemLorem ipsum dolor sit amet consectetur adipisicing elit. Nobis, quod.
+                      </p>
+                    </div>
                   </div>
                 </div>
               </div>
             </div>
-          </div>
-        )}
-      </WaterFull>
+          )}
+        </WaterFull>
+      </FTScroll>
     </div>
   );
 }
