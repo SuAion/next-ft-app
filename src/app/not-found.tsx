@@ -4,7 +4,6 @@ import { headers } from 'next/headers';
 /** @自定义404组件 **/
 export default async function NotFound() {
   const headersList = await headers();
-  console.log('=======>headersList', headersList);
   const domain = headersList.get('host');
 
   return (

@@ -1,86 +1,62 @@
-import type { AxiosError } from "axios";
-import axios, { type AxiosRequestConfig } from "axios";
-import { toast } from "sonner";
-const codeMessage: Record<number, string> = {
-  400: "请求错误",
-  401: "无访问权限",
-  403: "请求错误",
-  404: "请求不存在",
-  406: "请求的格式不可得",
-  410: "请求的资源被永久删除",
-  422: "当创建一个对象时，发生一个验证错误",
-  500: "服务器发生错误，请检查服务器",
-  502: "网关错误。",
-  503: "服务不可用，服务器暂时过载或维护",
-  504: "网关超时。",
-};
-export interface ErrorResponse {
-  message?: string;
-  // 根据实际情况添加其他属性
-}
-const errorHandler = async (error: AxiosError<ErrorResponse>) => {
-  const { response, code } = error;
-  if (response?.status) {
-    const statusText = codeMessage[response.status] || response.statusText;
-    const { status, data } = response;
-    console.log(status);
-    if (data?.message && typeof data?.message === "string") {
-      toast.error(data?.message);
-    } else {
-      toast.error(statusText);
-    }
-  } else if (code === "ERR_NETWORK") {
-    toast.error("网络连接失败，请检查网络");
-  }
+import axios, { AxiosInstance, InternalAxiosRequestConfig, AxiosResponse, AxiosError } from 'axios';
 
-  throw error;
+// 定义基础配置
+const DEFAULT_TIMEOUT = 10000;
+const BASE_URL = '/api';
+
+// 状态码映射
+const STATUS_MAPPING: Record<number, string> = {
+  400: '请求错误',
+  401: '未授权，请重新登录',
+  403: '拒绝访问',
+  404: '请求的资源不存在',
+  500: '服务器内部错误',
+  502: '网关错误',
+  503: '服务不可用',
+  504: '网关超时',
 };
-console.log(process.env.NEXT_PUBLIC_API, "process.env.NEXT_PUBLIC_API");
-const axiosInstance = axios.create({
-  baseURL: process.env.NEXT_PUBLIC_API || "/api",
-  timeout: 10 * 60 * 1000,
+
+// 创建axios实例
+const service: AxiosInstance = axios.create({
+  baseURL: BASE_URL,
+  timeout: DEFAULT_TIMEOUT,
+  headers: {
+    'Content-Type': 'application/json',
+  },
 });
 
-/**
- * 请求拦截器
- */
-axiosInstance.interceptors.request.use((config) => {
-  const token = localStorage.getItem("token") ?? "";
-  config.headers.set({
-    Authorization: `Bearer ${token}`,
-  });
-  return config;
-}, errorHandler);
-
-/**
- * 响应拦截器
- */
-axiosInstance.interceptors.response.use((res) => {
-  const { status, data } = res;
-  if (status === 200) {
-    // export
-    if (data instanceof ArrayBuffer) {
-      return {
-        contentDisposition: res.headers["content-disposition"],
-        data,
-      };
+// 请求拦截器
+service.interceptors.request.use(
+  (config: InternalAxiosRequestConfig<any>) => {
+    // 在这里可以添加token等请求头
+    const token = localStorage.getItem('token');
+    if (token) {
+      config.headers.set('Authorization', `Bearer ${token}`);
     }
-    /* OSS */
-    if (data instanceof Blob || typeof data === "string") return data;
+    return config;
+  },
+  (error: AxiosError) => {
+    return Promise.reject(error);
+  },
+);
 
-    const { code, message: msg } = data;
-    if (code === 0) return data;
-    if (code === 1016) {
-      // window.location.href = '/'
-      // TODO: use navigate('/login')
-      // window.location.reload()
+// 响应拦截器
+service.interceptors.response.use(
+  (response: AxiosResponse) => {
+    return response.data;
+  },
+  (error: AxiosError) => {
+    if (error.response) {
+      const status = error.response.status;
+      const message = STATUS_MAPPING[status] || `连接错误${status}`;
+      console.error(`请求错误: ${message}`);
+    } else if (error.request) {
+      console.error('请求超时，请检查网络连接');
     } else {
-      toast.error(msg);
-      return data;
+      console.error('请求错误:', error.message);
     }
-  }
-  return data;
-}, errorHandler);
+    return Promise.reject(error);
+  },
+);
 
-export const request = <T>(config: AxiosRequestConfig) =>
-  axiosInstance.request<unknown, T>(config);
+export default service;

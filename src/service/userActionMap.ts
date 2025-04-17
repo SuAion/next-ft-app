@@ -9,16 +9,14 @@ export interface User {
 }
 
 // 异步函数用于获取用户数据
+import request from '../lib/request';
+
 export async function fetchUserData(userId: string): Promise<User> {
   try {
-    const response = await fetch(`https://api.example.com/users/${userId}`);
-
-    // 检查响应是否成功
-    if (!response.ok) {
-      throw new Error(`网络错误: ${response.statusText}`);
-    }
-
-    const data: User = await response.json();
+    const data = await request({
+      url: `/users/${userId}`,
+      method: 'GET',
+    });
     return data;
   } catch (error) {
     console.error('获取用户数据失败:', error);
@@ -29,14 +27,10 @@ export async function fetchUserData(userId: string): Promise<User> {
 /** @用户_获取用户列表 **/
 export async function fetchUsers(): Promise<User[]> {
   try {
-    const response = await fetch('/api/user', {
+    const data = await request({
+      url: '/user',
       method: 'GET',
     });
-    if (!response.ok) {
-      throw new Error(`网络错误: ${response.statusText}`);
-    }
-
-    const data: User[] = await response.json();
     return data;
   } catch (error) {
     console.error('获取用户列表失败:', error);

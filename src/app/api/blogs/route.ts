@@ -1,11 +1,11 @@
-import { NextResponse } from 'next/server'
+import { ApiResponse } from '@/lib/response';
 
 export async function GET() {
   try {
-    const res = await fetch('https://api.pixbe.com/api/activity/banner?page=1&pageSize=12&platform=4')
-    const data = await res.json()
-    return NextResponse.json(data)
+    const res = await fetch('https://api.pixbe.com/api/activity/banner?page=1&pageSize=12&platform=4');
+    const data = await res.json();
+    return ApiResponse.success(data);
   } catch (error) {
-    return NextResponse.json({ error: '获取博客失败' }, { status: 500 })
+    return ApiResponse.error('获取博客失败');
   }
 }
