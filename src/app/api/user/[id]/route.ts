@@ -5,7 +5,7 @@ type Params = Record<string, string | string[]>;
 import { prisma } from '@/lib/prisma';
 import jwt from 'jsonwebtoken';
 import { cookies } from 'next/headers';
-import { ApiResponse } from '@/lib/response';
+import { ServerResponse } from '@/lib/response';
 
 const SECRET = process.env.JWT_SECRET || 'secret';
 
@@ -54,7 +54,7 @@ export async function PUT(request: Request, { params }: { params: Promise<Params
       },
     });
 
-    return ApiResponse.success(user);
+    return ServerResponse.success(user);
   } catch (error) {
     return NextResponse.json({ error: '更新用户失败' }, { status: 500 });
   }

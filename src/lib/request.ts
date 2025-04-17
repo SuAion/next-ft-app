@@ -43,6 +43,15 @@ service.interceptors.request.use(
 // 响应拦截器
 service.interceptors.response.use(
   (response: AxiosResponse) => {
+    // 确保返回数据包含User接口定义的所有属性
+    if (response.data && typeof response.data === 'object') {
+      return {
+        id: response.data.id || '',
+        name: response.data.name || '',
+        email: response.data.email || '',
+        ...response.data,
+      };
+    }
     return response.data;
   },
   (error: AxiosError) => {

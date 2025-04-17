@@ -2,14 +2,14 @@
 import { prisma } from '@/lib/prisma';
 import { verifyToken } from '@/lib/auth';
 import { NextResponse } from 'next/server';
-import { ApiResponse } from '@/lib/response';
+import { ServerResponse } from '@/lib/response';
 
 // GET /api/posts - 获取所有博客
 export async function GET() {
   const posts = await prisma.post.findMany({
     orderBy: { createdAt: 'desc' },
   });
-  return ApiResponse.success(posts);
+  return ServerResponse.success(posts);
 }
 
 // POST /api/posts - 创建新博客（需要权限）
@@ -25,8 +25,8 @@ export async function POST(req: Request) {
         authorId: user.id,
       },
     });
-    return ApiResponse.success(post);
+    return ServerResponse.success(post);
   } catch (err) {
-    return ApiResponse.error('Unauthorized', '400');
+    return ServerResponse.error('Unauthorized', '400');
   }
 }

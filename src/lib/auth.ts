@@ -1,7 +1,7 @@
 // lib/auth.ts
 import jwt from 'jsonwebtoken';
 import { cookies } from 'next/headers';
-import { ApiResponse } from './response';
+import { ServerResponse } from './response';
 
 const SECRET = process.env.JWT_SECRET || 'my-secret';
 

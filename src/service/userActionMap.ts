@@ -11,7 +11,7 @@ export interface User {
 // 异步函数用于获取用户数据
 import request from '../lib/request';
 
-export async function fetchUserData(userId: string): Promise<User> {
+export async function fetchUserData(userId: string) {
   try {
     const data = await request({
       url: `/users/${userId}`,
@@ -25,7 +25,7 @@ export async function fetchUserData(userId: string): Promise<User> {
 }
 
 /** @用户_获取用户列表 **/
-export async function fetchUsers(): Promise<User[]> {
+export async function fetchUsers() {
   try {
     const data = await request({
       url: '/user',

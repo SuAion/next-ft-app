@@ -6,7 +6,7 @@ type ResponseData<T = any> = {
   data?: T;
 };
 
-export class ApiResponse {
+export class ServerResponse {
   static success<T>(data?: T, msg: string = '操作成功'): NextResponse {
     return NextResponse.json({
       code: '200',
