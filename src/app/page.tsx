@@ -1,5 +1,6 @@
 'use client';
-import { FTScroll } from '@/components/FTScroll';
+
+import FTScroll from '@/components/FTScroll';
 import WaterFull from '@/components/WaterFull';
 import { Metadata } from 'next';
 import Image from 'next/image';
@@ -24,7 +25,9 @@ interface WorkItem {
 export default function Home() {
   const [WaterFullArr, setWaterFullArr] = useState<WorkItem[]>([]);
   const [loading, setLoading] = useState(false);
-  const [page, setPage] = useState(1); // 添加页码状态
+  const [page, setPage] = useState(1);
+  const [hasMore, setHasMore] = useState(true); // 是否还有更多数据
+  const [error, setError] = useState<string>(''); // 错误状态
 
   // 修改数据加载函数
   function loadMockData(num: number): Promise<WorkItem[]> {
@@ -47,18 +50,28 @@ export default function Home() {
         };
         mockData.push(info);
       }
-      resolve(mockData);
+      setTimeout(() => {
+        resolve(mockData);
+      }, 2000); // 延迟2秒再返回数据
     });
   }
 
   // 修改数据获取函数
   async function getData() {
-    if (loading) return;
+    if (loading || !hasMore) return;
     setLoading(true);
+    setError('');
+
     try {
       const newData = await loadMockData(30);
+      if (newData.length === 0) {
+        setHasMore(false);
+        return;
+      }
       setWaterFullArr((prev) => [...prev, ...newData]);
       setPage((prev) => prev + 1);
+    } catch (err) {
+      setError(err instanceof Error ? err.message : '加载失败，请重试');
     } finally {
       setLoading(false);
     }
@@ -71,7 +84,10 @@ export default function Home() {
 
   return (
     <div className="public-section-container">
-      <p className="fixed w-10 bg-white red">{WaterFullArr.length}</p>
+      {error && (
+        <p className="fixed top-4 left-1/2 -translate-x-1/2 bg-red-500 text-white px-4 py-2 rounded">{error}</p>
+      )}
+      <p className="fixed top-4 right-4 bg-white px-2 py-1 rounded shadow">{WaterFullArr.length} 个作品</p>
       <FTScroll
         id="scroll"
         className="scroll-container"
@@ -93,6 +109,7 @@ export default function Home() {
                     alt="Next.js logo"
                     width={item.imageWidth}
                     height={item.imageHeight}
+                    style={{ width: '100%', height: 'auto' }} // 保持宽高比
                     priority
                   />
                 </div>
