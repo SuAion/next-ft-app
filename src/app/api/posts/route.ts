@@ -27,6 +27,6 @@ export async function POST(req: Request) {
     });
     return ServerResponse.success(post);
   } catch (err) {
-    return ServerResponse.error('Unauthorized', '400');
+    return ServerResponse.error('Unauthorized');
   }
 }

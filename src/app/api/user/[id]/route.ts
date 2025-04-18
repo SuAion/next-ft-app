@@ -28,16 +28,16 @@ export async function GET() {
     });
     if (!user) throw new Error('用户不存在');
 
-    return NextResponse.json({ user });
+    return ServerResponse.success({ user });
   } catch (err: any) {
-    return NextResponse.json({ error: err.message || '获取用户信息失败' }, { status: 401 });
+    return ServerResponse.error(err.message || '获取用户信息失败');
   }
 }
 
 // 更新用户
 export async function PUT(request: Request, { params }: { params: Promise<Params> }) {
   try {
-    // const body = await request.json()
+    // const body = await request.success()
     // const { email, name } = body
     const resolvedParams = await params; // 等待 params 解析
     const formData = await request.formData(); // 获取 formData
@@ -56,7 +56,7 @@ export async function PUT(request: Request, { params }: { params: Promise<Params
 
     return ServerResponse.success(user);
   } catch (error) {
-    return NextResponse.json({ error: '更新用户失败' }, { status: 500 });
+    return ServerResponse.error('更新用户失败');
   }
 }
 
@@ -70,8 +70,8 @@ export async function DELETE(request: Request, { params }: { params: Promise<Par
       },
     });
 
-    return NextResponse.json({ message: '用户删除成功' });
+    return ServerResponse.success({ message: '用户删除成功' });
   } catch (error) {
-    return NextResponse.json({ error: '删除用户失败' }, { status: 500 });
+    return ServerResponse.error('删除用户失败');
   }
 }

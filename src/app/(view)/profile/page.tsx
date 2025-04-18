@@ -1,10 +1,6 @@
 'use client';
-
-import { Suspense, use } from 'react';
-import I18nWrapper from '@/hoc/I18nWrapper';
 import UserProfileCard from '@/app/ui-components/Display/Profile/UserProfileCard';
 import OrderHistory from '@/app/ui-components/Display/Profile/OrderHistory';
-
 export default function ProfilePage() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 to-purple-50">
@@ -22,11 +18,6 @@ export default function ProfilePage() {
             <OrderHistory />
           </div>
         </div>
-
-        {/* 国际化包装 */}
-        {/* <I18nWrapper> */}
-        {/* 其他客户端组件可以放在这里 */}
-        {/* </I18nWrapper> */}
       </div>
     </div>
   );

@@ -10,10 +10,9 @@ export default function PostListPage() {
   const [posts, setPosts] = useState<Post[]>([]);
 
   useEffect(() => {
-    console.log('=======>111', 111);
     getAllPosts().then((res) => {
       console.log('=======>res', res);
-      setPosts(res);
+      setPosts(res.data);
     });
   }, []);
 

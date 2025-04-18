@@ -66,9 +66,7 @@
 // //   );
 // // }
 
-'use client';
 import { create } from 'zustand';
-
 // 声明 Post 类型
 type Post = {
   id: number; // 帖子的唯一标识符

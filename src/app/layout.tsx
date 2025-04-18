@@ -17,6 +17,8 @@ export const metadata: Metadata = {
   description: '创建Next.js 学习博客',
 };
 import I18nWrapper from '@/hoc/I18nWrapper';
+import dynamic from 'next/dynamic';
+import BottomNav from './ui-components/Layout/BottomNav';
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -27,7 +29,7 @@ export default function RootLayout({
       <body className={`antialiased `}>
         <I18nWrapper>
           {children}
-          {/* <BottomNav /> */}
+          <BottomNav />
         </I18nWrapper>
       </body>
     </html>

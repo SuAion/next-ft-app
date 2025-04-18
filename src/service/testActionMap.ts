@@ -16,7 +16,7 @@ import request from '../lib/request';
 
 export async function fetchBlogs(): Promise<Blog[]> {
   try {
-    const data = await request({
+    const { data } = await request({
       url: '/blogs',
       method: 'GET',
     });

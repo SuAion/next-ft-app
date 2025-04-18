@@ -7,7 +7,7 @@ const ADMIN_LOGIN_PATH = '/loginAdmin';
 
 export async function middleware(req: NextRequest) {
   const { pathname } = req.nextUrl;
-  
+
   // 公共路径直接放行
   if (PUBLIC_PATHS.some((path) => pathname.startsWith(path)) || pathname.startsWith(ADMIN_LOGIN_PATH)) {
     return NextResponse.next();
@@ -43,5 +43,5 @@ export async function middleware(req: NextRequest) {
 }
 
 export const config = {
-  matcher: ['/admin/:path*', '/explore'],
+  matcher: ['/admin/:path*'],
 };

@@ -1,4 +1,4 @@
-"use client";
+'use client';
 import { globalStore } from '@/store/globalStore';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
@@ -6,17 +6,16 @@ import React, { useEffect, useLayoutEffect, useState } from 'react';
 
 export default function BottomNav() {
   const [isClient, setIsClient] = useState(false);
-  const isMobile = globalStore(state => state.isMobile)
-  const setIsMobile = globalStore(state => state.setIsMobile)
-
+  const isMobile = globalStore((state) => state.isMobile);
+  const setIsMobile = globalStore((state) => state.setIsMobile);
 
   const handle_resize = () => {
     if (window.innerWidth < 768) {
-      setIsMobile(true)
+      setIsMobile(true);
     } else {
-      setIsMobile(false)
+      setIsMobile(false);
     }
-  }
+  };
 
   useEffect(() => {
     setIsClient(true);
@@ -28,29 +27,22 @@ export default function BottomNav() {
   }, []);
 
   useLayoutEffect(() => {
-    window.addEventListener('resize', handle_resize)
+    window.addEventListener('resize', handle_resize);
     return () => {
-      window.removeEventListener('resize', handle_resize)
-    }
-  }, [isMobile])
+      window.removeEventListener('resize', handle_resize);
+    };
+  }, [isMobile]);
 
-
-  const pathname = usePathname()
-
-  if (!isMobile) {
-    return null
-  }
-
+  // 这几个页面不要
+  const pathname = usePathname();
   if (pathname === '/login' || pathname === '/register' || pathname === '/reset-password') {
-    return null
+    return null;
   }
 
-  if (!isClient) {
-    // 在服务端渲染时返回一个占位元素
-    return <div className="bottom-nav-placeholder"></div>;
+  // 检查是否在 移动端 客户端渲染
+  if (!isClient || !isMobile) {
+    return null;
   }
-
-
 
   return (
     <nav className="fixed bottom-0 left-0 right-0 bg-white border-t max-w-md mx-auto">
@@ -75,6 +67,5 @@ export default function BottomNav() {
         </Link>
       </div>
     </nav>
-  )
+  );
 }
-

@@ -76,12 +76,9 @@ export default function UsersManagementPage() {
   const [pending, setPending] = useState(false);
   const [users, setUsers] = useState([]);
   const [editUser, setEditUser] = useState(null);
-
   const { i18n } = useTranslation();
-  console.log('=======>i18n', i18n);
 
   const changeLanguage = (lng) => {
-    console.log('=======>lng', lng);
     i18n.changeLanguage(lng);
   };
 
@@ -102,8 +99,9 @@ export default function UsersManagementPage() {
 
   const fetchUsersList = async () => {
     try {
-      const data = await fetchUsers();
-      setUsers(data);
+      const { data, headers } = await fetchUsers();
+      console.log('=======>data1', data, headers);
+      setUsers(data.data);
     } catch (error) {
       console.error('获取用户列表失败:', error);
     }

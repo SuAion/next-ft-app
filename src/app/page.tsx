@@ -6,6 +6,7 @@ import WaterFull from '@/components/WaterFull';
 import { Metadata } from 'next';
 import Image from 'next/image';
 import { use, useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 
 interface WorkItem {
   id: string;
@@ -28,7 +29,7 @@ export default function Home() {
   const [loading, setLoading] = useState(false);
   const [page, setPage] = useState(1);
   const [hasMore, setHasMore] = useState(true); // 是否还有更多数据
-
+  const { t, i18n } = useTranslation();
   // 修改数据加载函数
   function loadMockData(num: number): Promise<WorkItem[]> {
     return new Promise((resolve) => {
@@ -82,7 +83,9 @@ export default function Home() {
 
   return (
     <div className="public-section-container">
-      <p className="fixed top-4 right-4 bg-white px-2 py-1 rounded shadow">{WaterFullArr.length} 个作品</p>
+      <p className="fixed top-4 right-4 bg-white px-2 py-1 rounded shadow">
+        {WaterFullArr.length} 个{t('validation.name_min_length')}{' '}
+      </p>
       <FTScroll
         id="scroll"
         className="scroll-container"
@@ -113,7 +116,12 @@ export default function Home() {
                     priority
                   />
                 </div>
-                <div className="card_info" style={{ paddingTop: item.imageHeight }}>
+                <div
+                  className="card_info"
+                  style={{
+                    paddingTop: (item.imageHeight / item.imageWidth) * 100 + '%', // 计算高度占比,
+                  }}
+                >
                   <div className="author">
                     <div className="avatar"></div>
                     <div className="author-info">
