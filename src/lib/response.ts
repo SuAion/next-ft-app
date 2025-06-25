@@ -8,18 +8,7 @@ export enum ErrorCode {
   INTERNAL_ERROR = 'INTERNAL_ERROR',
   DATABASE_ERROR = 'DATABASE_ERROR'
 }
-
-interface ApiResponse<T = any> {
-  success: boolean;
-  data?: T;
-  message?: string;
-  error?: {
-    code: ErrorCode;
-    message: string;
-    details?: any;
-  };
-  timestamp: string;
-}
+import { ApiResponse } from '@/types';
 
 export class ServerResponse {
   static success<T>(data?: T, message?: string): NextResponse {

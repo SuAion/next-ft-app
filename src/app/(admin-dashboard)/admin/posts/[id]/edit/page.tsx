@@ -3,7 +3,7 @@
 
 import { useEffect, useState } from 'react';
 import { useParams, useRouter } from 'next/navigation';
-import { getPostById, updatePostById } from '@/service/postActionMap';
+import { postService } from '@/service';
 
 export default function EditPostPage() {
   const { id } = useParams() as { id: string };
@@ -12,14 +12,15 @@ export default function EditPostPage() {
   const router = useRouter();
 
   useEffect(() => {
-    getPostById(id).then((post) => {
+    postService.getById(id).then((response) => {
+      const post = response.data;
       setTitle(post.title);
       setContent(post.content);
     });
   }, [id]);
 
   const handleUpdate = async () => {
-    await updatePostById(id, { title, content });
+    await postService.update(id, { title, content });
     router.push('/posts');
   };
 

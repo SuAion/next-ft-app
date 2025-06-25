@@ -6,6 +6,7 @@ import { useTranslation } from 'react-i18next';
 export default function ClientSideCp({ initialPosts }) {
   const count = baseStore((state) => state.count);
   const posts = baseStore((state) => state.posts);
+  console.log('=======>posts', posts)
   const setPosts = baseStore((state) => state.setPosts);
 
   const { t, i18n } = useTranslation();

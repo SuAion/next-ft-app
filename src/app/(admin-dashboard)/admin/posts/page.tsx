@@ -2,23 +2,27 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { getAllPosts, deletePostById } from '@/service/postActionMap';
+import { postService } from '@/service';
 import { Post } from '@/types/post';
 import Link from 'next/link';
+import { baseStore } from '@/store/baseStore';
 
 export default function PostListPage() {
   const [posts, setPosts] = useState<Post[]>([]);
+  const setStorePosts = baseStore((state) => state.setPosts);
 
   useEffect(() => {
-    getAllPosts().then((res) => {
+    postService.getAll().then((res) => {
       console.log('=======>res', res);
       setPosts(res.data);
+      setStorePosts(res.data);
     });
   }, []);
 
   const handleDelete = async (id: string) => {
-    await deletePostById(id);
+    await postService.delete(id);
     setPosts(posts.filter((post) => post.id !== id));
+    setStorePosts(posts.filter((post) => post.id !== id));
   };
 
   return (

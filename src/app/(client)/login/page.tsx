@@ -1,6 +1,6 @@
 'use client';
 
-import { Signup } from '@/service/userActionMap';
+import { userService } from '@/service';
 import { useState } from 'react';
 import { motion } from 'framer-motion';
 import Link from 'next/link';
@@ -15,7 +15,10 @@ export default function LoginPage() {
     setPending(true);
     const formData = new FormData(event.target);
     try {
-      const result = await Signup(formData);
+      const result = await userService.login({
+        email: formData.get('email') as string,
+        password: formData.get('password') as string
+      });
       console.log(result);
       setState(result);
       // 使用 router.push 进行路由跳转

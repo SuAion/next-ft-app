@@ -2,7 +2,7 @@
 'use client';
 
 import { useState } from 'react';
-import { createPost } from '@/service/postActionMap';
+import { postService } from '@/service';
 import { useRouter } from 'next/navigation';
 
 export default function NewPostPage() {
@@ -11,7 +11,7 @@ export default function NewPostPage() {
   const router = useRouter();
 
   const handleSubmit = async () => {
-    await createPost({ title, content });
+    await postService.create({ title, content });
     router.push('/admin/posts');
   };
 

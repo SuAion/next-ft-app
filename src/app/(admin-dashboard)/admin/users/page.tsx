@@ -1,6 +1,6 @@
 'use client';
 
-import { RegisUser, fetchUsers, deleteUser, updateUser } from '@/service/userActionMap';
+import { userService } from '@/service';
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
@@ -87,7 +87,11 @@ export default function UsersManagementPage() {
     setPending(true);
     const formData = new FormData(event.target);
     try {
-      const result = await RegisUser(formData);
+      const result = await userService.register({
+        name: formData.get('name') as string,
+        email: formData.get('email') as string,
+        password: formData.get('password') as string
+      });
       setState(result);
       fetchUsersList();
     } catch (error) {
@@ -99,9 +103,8 @@ export default function UsersManagementPage() {
 
   const fetchUsersList = async () => {
     try {
-      const { data, headers } = await fetchUsers();
-      console.log('=======>data1', data, headers);
-      setUsers(data.data);
+      const { data, headers } = await userService.getList();
+      setUsers(data);
     } catch (error) {
       console.error('获取用户列表失败:', error);
     }
@@ -109,7 +112,7 @@ export default function UsersManagementPage() {
 
   const handleDelete = async (userId) => {
     try {
-      await deleteUser(userId);
+      await userService.delete(userId);
       fetchUsersList();
     } catch (error) {
       console.error('删除用户失败:', error);
@@ -124,7 +127,10 @@ export default function UsersManagementPage() {
     event.preventDefault();
     const formData = new FormData(event.target);
     try {
-      await updateUser(editUser.id, formData);
+      await userService.update(editUser.id, {
+        name: formData.get('name') as string,
+        email: formData.get('email') as string
+      });
       fetchUsersList();
       setEditUser(null);
     } catch (error) {

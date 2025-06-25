@@ -1,5 +1,5 @@
 'use client';
-import { fetchBlogs } from '@/service/testActionMap';
+import { postService } from '@/service';
 import { VirtualList } from '@/components/baseCommon/VirtualList';
 import { useEffect, useState } from 'react';
 
@@ -13,7 +13,14 @@ interface Blog {
 export default function ShopList() {
   const [blogs, setBlogs] = useState<Blog[]>([]);
   const getData = async () => {
-    const data = await fetchBlogs();
+    const response = await postService.getAll();
+    const data = response.data.map((post: any) => ({
+      id: post.id,
+      title: post.title,
+      author: post.author || '未知作者',
+      category: post.category || '默认分类',
+      date: new Date(post.createdAt).toLocaleDateString(),
+    }));
     setBlogs([...blogs, ...data]);
   };
 

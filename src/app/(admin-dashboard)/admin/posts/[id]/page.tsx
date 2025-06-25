@@ -2,7 +2,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { getAllPosts, deletePostById } from '@/service/postActionMap';
+import { postService } from '@/service';
 import { Post } from '@/types/post';
 import Link from 'next/link';
 
@@ -10,11 +10,11 @@ export default function PostListPage() {
   const [posts, setPosts] = useState<Post[]>([]);
 
   useEffect(() => {
-    getAllPosts().then(setPosts);
+    postService.getAll().then((response) => setPosts(response.data));
   }, []);
 
   const handleDelete = async (id: string) => {
-    await deletePostById(id);
+    await postService.delete(id);
     setPosts(posts.filter((post) => post.id !== id));
   };
 
