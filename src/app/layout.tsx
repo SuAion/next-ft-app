@@ -18,7 +18,7 @@ export const metadata: Metadata = {
 };
 import I18nWrapper from '@/hoc/I18nWrapper';
 import dynamic from 'next/dynamic';
-import BottomNav from './ui-components/Layout/BottomNav';
+import BottomNav from '../components/layout/BottomNav';
 export default function RootLayout({
   children,
 }: Readonly<{

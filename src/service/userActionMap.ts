@@ -27,11 +27,16 @@ export async function fetchUserData(userId: string) {
 /** @用户_获取用户列表 **/
 export async function fetchUsers() {
   try {
-    const { data, headers } = await request({
+    const response = await request({
       url: '/user',
       method: 'GET',
     });
-    return { data, headers };
+
+    // 现在可以访问 headers 了
+    return {
+      data: response.data,
+      headers: (response as any).headers
+    };
   } catch (error) {
     console.error('获取用户列表失败:', error);
     throw error;

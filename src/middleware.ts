@@ -3,10 +3,11 @@ import { NextRequest, NextResponse } from 'next/server';
 import { jwtVerify } from 'jose';
 
 // 路径配置
-const PUBLIC_PATHS = ['/api', '/login', '/register', '/'];
+// 路径配置 - 根据新的路由分组优化
+const PUBLIC_PATHS = ['/api', '/login', '/register', '/', '/explore'];
 const ADMIN_PATHS = ['/admin'];
-const ADMIN_LOGIN_PATH = '/loginAdmin';
-const PROTECTED_PATHS = ['/profile', '/chat'];
+const ADMIN_PUBLIC_PATHS = ['/loginAdmin', '/preData']; // 后台公开页面
+const CLIENT_PROTECTED_PATHS = ['/profile', '/chat']; // 客户端需登录页面
 
 interface JWTPayload {
   id: string;
@@ -25,9 +26,9 @@ export async function middleware(req: NextRequest) {
     return NextResponse.next();
   }
 
-  // 公共路径直接放行
+  // 公共路径和后台公开路径直接放行
   if (PUBLIC_PATHS.some((path) => pathname === path || (path !== '/' && pathname.startsWith(path))) ||
-    pathname.startsWith(ADMIN_LOGIN_PATH)) {
+    ADMIN_PUBLIC_PATHS.some((path) => pathname.startsWith(path))) {
     return NextResponse.next();
   }
 
@@ -66,7 +67,7 @@ export async function middleware(req: NextRequest) {
   }
 
   // 处理需要登录的前台路由
-  if (PROTECTED_PATHS.some((path) => pathname.startsWith(path))) {
+  if (CLIENT_PROTECTED_PATHS.some((path) => pathname.startsWith(path))) {
     if (!token) {
       return NextResponse.redirect(new URL('/login', req.url));
     }

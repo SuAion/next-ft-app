@@ -1,6 +1,6 @@
 'use client';
 import { fetchBlogs } from '@/service/testActionMap';
-import { VirtualList } from '@/components/VirtualList';
+import { VirtualList } from '@/components/baseCommon/VirtualList';
 import { useEffect, useState } from 'react';
 
 interface Blog {

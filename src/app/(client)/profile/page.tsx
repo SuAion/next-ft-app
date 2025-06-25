@@ -1,6 +1,6 @@
 'use client';
-import UserProfileCard from '@/app/ui-components/Display/Profile/UserProfileCard';
-import OrderHistory from '@/app/ui-components/Display/Profile/OrderHistory';
+import UserProfileCard from '@/components/businessPack/Profile/UserProfileCard';
+import OrderHistory from '@/components/businessPack/Profile/OrderHistory';
 export default function ProfilePage() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 to-purple-50">

@@ -247,7 +247,10 @@ const request = <T = any>(options: RequestConfig<T>): AppResponse<T> => {
     ) as AppResponse<T>;
   }
 
-  return service(options).then((response) => response.data) as AppResponse<T>;
+  return service(options).then((response) => ({
+    ...response.data,
+    headers: response.headers
+  })) as AppResponse<T>;
 };
 
 export default request;

@@ -1,8 +1,8 @@
 'use client';
 
-import FTImage from '@/components/FTImage';
-import FTScroll from '@/components/FTScroll';
-import WaterFull from '@/components/WaterFull';
+import FTImage from '@/components/baseCommon/FTImage';
+import FTScroll from '@/components/baseCommon/FTScroll';
+import WaterFull from '@/components/baseCommon/WaterFull';
 import { Metadata } from 'next';
 import Image from 'next/image';
 import { use, useEffect, useState } from 'react';

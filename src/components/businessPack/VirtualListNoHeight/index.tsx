@@ -1,5 +1,5 @@
 'use client'
-import VirtualListNoHeight from "@/components/VirtualListNoHeight"
+import VirtualListNoHeight from "@/components/baseCommon/VirtualListNoHeight"
 import { useEffect, useState } from "react"
 import Mock from 'mockjs';
 interface Blog {

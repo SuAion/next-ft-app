@@ -15,7 +15,7 @@
 //   );
 // }
 
-import ServerSideCp from "@/components/ServerSideCp";
+import ServerSideCp from "@/components/businessPack/ServerSideCp";
 
 export default async function Home() {
   return (

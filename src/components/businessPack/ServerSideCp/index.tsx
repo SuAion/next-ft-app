@@ -1,4 +1,4 @@
-import ClientSideCp from './../ClientSideCp/index';
+import ClientSideCp from '../ClientSideCp/index';
 
 export default async function ServerSideCp() {
   try {
