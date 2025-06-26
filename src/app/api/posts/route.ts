@@ -1,5 +1,5 @@
 // app/api/posts/route.ts
-import { prisma } from '@/lib/prisma';
+import { prisma } from '@/lib/database';
 import { verifyToken } from '@/lib/auth';
 import { NextResponse } from 'next/server';
 import { ServerResponse, ErrorCode } from '@/lib/response';
@@ -36,6 +36,7 @@ export async function GET(req: Request) {
       }
       : {};
 
+    // 执行数据库查询
     const [posts, total] = await Promise.all([
       prisma.post.findMany({
         where,
@@ -54,7 +55,7 @@ export async function GET(req: Request) {
       prisma.post.count({ where }),
     ]);
 
-    return ServerResponse.success({
+    const response = {
       posts,
       pagination: {
         page,
@@ -62,7 +63,9 @@ export async function GET(req: Request) {
         total,
         pages: Math.ceil(total / limit),
       },
-    });
+    };
+
+    return ServerResponse.success(response);
   } catch (error) {
     console.error('获取博客列表失败:', error);
     return ServerResponse.databaseError('获取博客列表失败');
@@ -106,17 +109,21 @@ export async function POST(req: Request) {
       },
     });
 
+    console.log(`✅ 博客创建成功: ${post.id} - "${post.title}"`);
     return ServerResponse.success(post, '博客创建成功');
   } catch (error) {
     console.error('创建博客失败:', error);
 
-    // 根据错误类型返回不同响应
+    // 简化的错误处理
     if (error instanceof Error) {
+      // 认证相关错误
       if (error.message.includes('Unauthorized')) {
         return ServerResponse.authenticationError('认证失败');
       }
-      if (error.message.includes('Prisma')) {
-        return ServerResponse.databaseError('数据库操作失败', error.message);
+
+      // 数据库相关错误
+      if (error.message.includes('Prisma') || error.message.includes('connection')) {
+        return ServerResponse.databaseError('数据库操作失败');
       }
     }
 
