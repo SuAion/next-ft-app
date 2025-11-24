@@ -113,3 +113,38 @@ export interface MenuItem {
     hidden?: boolean;
     permission?: string;
 }
+
+// 基础通用类型定义
+export interface BaseResponse<T = any> {
+    success: boolean;
+    data?: T;
+    message?: string;
+    error?: string;
+}
+
+export interface PaginationParams {
+    page: number;
+    limit: number;
+}
+
+export interface PaginationResponse<T> {
+    data: T[];
+    total: number;
+    page: number;
+    limit: number;
+    totalPages: number;
+}
+
+// I18n 相关类型定义
+export enum I18nNamespacesEnum {
+    Common = 'common',
+    Auth = 'auth',
+    Profile = 'profile',
+    Posts = 'posts',
+    Admin = 'admin',
+}
+
+export interface I18nProps {
+    lng: string;
+    resources: Record<string, any>;
+}

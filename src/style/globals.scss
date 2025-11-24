@@ -2,6 +2,7 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
 :root {
   --background: #ffffff;
   --foreground: #171717;
@@ -23,7 +24,8 @@ body {
 * {
   padding: 0;
   margin: 0;
-  font-family: var(--font-inter) !important;
+  /* 修复：使用正确的字体变量名，并添加日文字体支持 */
+  font-family: var(--font-poppins), var(--font-noto-sans-jp), Arial, Helvetica, sans-serif !important;
   -webkit-tap-highlight-color: transparent;
   @include scrollStyle();
 }
@@ -155,6 +157,7 @@ button {
     }
   }
 }
+
 .ft-detail-hover-white-tooltips {
   /* tooltip 嵌套时 antd 会自动加一个zIndex，这里把公用的 zIndex 加 important */
   z-index: 10001 !important;
@@ -180,6 +183,7 @@ button {
 .card-box {
   border-radius: 10px;
   position: relative;
+
   .card_img {
     position: absolute;
     top: 0;
@@ -190,20 +194,26 @@ button {
       height: auto;
     }
   }
+
   .card_info {
     width: 100%;
+
     .title {
       font-size: 20px;
     }
+
     .author {
       font-size: 14px;
+
       .avatar {
         width: 20px;
         height: 20px;
       }
+
       .avatar-info {
         margin-left: 10px;
       }
+
       .avatar-desc {
         width: 100%;
         overflow: hidden;

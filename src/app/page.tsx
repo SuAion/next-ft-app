@@ -3,6 +3,7 @@
 import FTImage from '@/components/baseCommon/FTImage';
 import FTScroll from '@/components/baseCommon/FTScroll';
 import WaterFull from '@/components/baseCommon/WaterFull';
+import BottomNav from '@/components/layout/BottomNav';
 import { Metadata } from 'next';
 import Image from 'next/image';
 import { use, useEffect, useState } from 'react';
@@ -82,61 +83,64 @@ export default function Home() {
   }, []);
 
   return (
-    <div className="public-section-container">
-      <p className="fixed top-4 right-4 bg-white px-2 py-1 rounded shadow">
-        {WaterFullArr.length} 个{t('validation.name_min_length')}{' '}
-      </p>
-      <FTScroll
-        id="scroll"
-        className="scroll-container"
-        onScrollToBottom={getData}
-        loading={loading}
-        relativeNeedDropDownData={WaterFullArr}
-      >
-        <WaterFull columns={2} gap={20} waterFullData={WaterFullArr}>
-          {(
-            item, // 将 children 作为函数传递
-          ) => (
-            <div className=" water-templete  flex flex-col gap-4">
-              <div
-                className="card-box"
-                style={
-                  {
-                    // paddingBottom: (item.imageHeight / item.imageWidth) * 100 + '%', // 计算高度占比,
-                  }
-                }
-              >
-                <div className="card_img">
-                  <FTImage
-                    className="dark:invert"
-                    src={item.url}
-                    alt="Next.js logo"
-                    width={item.imageWidth}
-                    height={item.imageHeight}
-                    priority
-                  />
-                </div>
+    <>
+      <div className="public-section-container" style={{ flexDirection: 'column' }}>
+        <p className="  bg-white px-2 py-1 rounded shadow">
+          {WaterFullArr.length} 个{t('validation.name_min_length')}{' '}
+        </p>
+        <FTScroll
+          id="scroll"
+          className="scroll-container"
+          onScrollToBottom={getData}
+          loading={loading}
+          relativeNeedDropDownData={WaterFullArr}
+        >
+          <WaterFull columns={2} gap={20} waterFullData={WaterFullArr}>
+            {(
+              item, // 将 children 作为函数传递
+            ) => (
+              <div className=" water-templete  flex flex-col gap-4">
                 <div
-                  className="card_info"
-                  style={{
-                    paddingTop: (item.imageHeight / item.imageWidth) * 100 + '%', // 计算高度占比,
-                  }}
+                  className="card-box"
+                  style={
+                    {
+                      // paddingBottom: (item.imageHeight / item.imageWidth) * 100 + '%', // 计算高度占比,
+                    }
+                  }
                 >
-                  <div className="author">
-                    <div className="avatar"></div>
-                    <div className="author-info">
-                      <p className="author-name">{item.info.author}</p>
-                      <p className="author-desc">
-                        itemLorem ipsum dolor sit amet consectetur adipisicing elit. Nobis, quod.
-                      </p>
+                  <div className="card_img">
+                    <FTImage
+                      className="dark:invert"
+                      src={item.url}
+                      alt="Next.js logo"
+                      width={item.imageWidth}
+                      height={item.imageHeight}
+                      priority
+                    />
+                  </div>
+                  <div
+                    className="card_info"
+                    style={{
+                      paddingTop: (item.imageHeight / item.imageWidth) * 100 + '%', // 计算高度占比,
+                    }}
+                  >
+                    <div className="author">
+                      <div className="avatar"></div>
+                      <div className="author-info">
+                        <p className="author-name">{item.info.author}</p>
+                        <p className="author-desc">
+                          itemLorem ipsum dolor sit amet consectetur adipisicing elit. Nobis, quod.
+                        </p>
+                      </div>
                     </div>
                   </div>
                 </div>
               </div>
-            </div>
-          )}
-        </WaterFull>
-      </FTScroll>
-    </div>
+            )}
+          </WaterFull>
+        </FTScroll>
+      </div>
+      <BottomNav />
+    </>
   );
 }
